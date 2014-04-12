@@ -1291,3 +1291,12 @@ msgstr "Прикреплены фото"
 
 msgid "MimeType"
 msgstr "Тип MIME"
+
+msgid "GWHA"
+msgstr "АГВ"
+
+msgid "Boiler"
+msgstr "Бойлер"
+
+msgid "CentralHeating"
+msgstr "Центральное отопление"
