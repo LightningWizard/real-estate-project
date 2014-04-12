@@ -1,0 +1,161 @@
+<?php
+    echo $this->partial('treegrid-scripts.phtml', array('source'   => $this->source,
+                                                        'colNames' => $this->colNames,
+                                                        'colModel' => $this->colModel,
+         ));
+?>
+<script type="text/javascript" language="javascript">
+    page = $.extend(page, {
+        selectedRow: null,
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+
+            var buttons = {};
+            <?php if ($this->acl->assert('department', 'edit')) { ?>
+            buttons[<?php echo Zend_Json::encode($this->translate('CreateCommand')); ?>] = {
+                id: 'action-create',
+                icon: '/img/icons/24x24/add.gif',
+                action: function() {
+                    $('<div />').iwindow({
+                        title: <?php echo Zend_Json::encode($this->translate('NewDepartment')); ?>,
+                        url: '/administration/departments/item',
+                        maximized: true,
+                        bubble: true
+                    });
+                }
+            };
+            <?php } ?>
+            <?php if ($this->acl->assert('department', 'remove')) { ?>
+            buttons[<?php echo Zend_Json::encode($this->translate('DeleteCommand')); ?>] = {
+                id: 'action-remove',
+                icon: '/img/icons/24x24/remove.gif',
+                action: function() {
+                    $('<div />')
+                        .html(<?php echo Zend_Json::encode($this->translate('DeleteDepartmentConfirm!HTML!')); ?>)
+                        .dialog({
+                            title: <?php echo Zend_Json::encode($this->translate('DeleteAction')); ?>,
+                            modal: true,
+                            resizable: false,
+                            width: 400,
+                            buttons: {
+                                <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>: function() {
+                                    $(this).dialog('destroy').remove();
+                                },
+                                <?php echo Zend_Json::encode($this->translate('DeleteCommand')); ?>: function() {
+                                    var dialog = $(this);
+                                    $.ajax({
+                                        async: false,
+                                        url: '/administration/departments/delete',
+                                        data: {'items[]': $('#list').getGridParam('selrow')},
+                                        type: 'POST',
+                                        beforeSend: function() {
+                                            $('<div />')
+                                                .addClass('ui-dialog-loader')
+                                                .prependTo(dialog.children().css({opacity: 0}).end());
+                                        },
+                                        complete: function() {
+                                            $('#list').trigger('reloadGrid');
+                                            dialog.dialog('destroy').remove();
+                                        }
+                                    })
+                                }
+                            }
+                        });
+                }
+            };
+            <?php } ?>
+            <?php if ($this->acl->assert('department', 'edit')) { ?>
+            buttons[<?php echo Zend_Json::encode($this->translate('EditCommand')); ?>] = {
+                id: 'action-edit',
+                icon: '/img/icons/24x24/edit.gif',
+                action: function() {
+                    var rowId = $('#list').getGridParam('selrow');
+                    var row = $('#' + rowId);
+                    $('<div />').iwindow({
+                        title: <?php echo Zend_Json::encode($this->translate('Department')); ?> + ' "' + row.find('td:nth-child(2)').text() + '"',
+                        url: '/administration/departments/item/id/' + rowId,
+                        maximized: true,
+                        bubble: true
+                    });
+                }
+            };
+            <?php } else { ?>
+            buttons[<?php echo Zend_Json::encode($this->translate('ExploreCommand')); ?>] = {
+                id: 'action-edit',
+                icon: '/img/icons/24x24/explore.gif',
+                action: function() {
+                    var rowId = $('#list').getGridParam('selrow');
+                    var row = $('#' + rowId);
+                    $('<div />').iwindow({
+                        title: <?php echo Zend_Json::encode($this->translate('Department')); ?> + ' "' + row.find('td:nth-child(2)').text() + '"',
+                        url: '/administration/departments/item/id/' + rowId,
+                        maximized: true,
+                        bubble: true
+                    });
+                }
+            };
+            <?php } ?>
+            self.createToolbar(buttons);
+
+            self.createGridToolbar(
+                <?php echo Zend_Json::encode($this->translate('RefreshCommand')); ?>,
+                false,
+                false,
+                false
+            );
+            $('#page-toolbar .ui-button').button('disable');
+        },
+        beforePageLayout: function() {
+            var self = this;
+
+            var grid = $('#list');
+            grid.setGridParam({
+                loadBeforeSend: function() {
+                    $('#page-toolbar .ui-button').button('disable');
+                },
+                gridComplete: function() {
+                    $('#list tr.jqgrow').each(function(){
+                       var row =$(this);
+                       row.find('td:eq(1)')
+                            .wrapInner($('<a />').attr('href', '/administration/departments/item/id/' + row.attr('id')))
+                            .find('a')
+                                .click(function() {
+                                    $('<div />').iwindow({
+                                        title: <?php echo Zend_Json::encode($this->translate('Department')); ?> + ' "' + $(this).text() + '"',
+                                        url: $(this).attr('href'),
+                                        maximized: true,
+                                        bubble: true
+                                    })
+                                    return false;
+                                });
+                        row.find('td:eq(2)')
+                            .wrapInner($('<a />').attr('href', '/administration/departments/item/id/' + row.attr('id')))
+                            .find('a')
+                                .click(function() {
+                                    $('<div />').iwindow({
+                                        title: <?php echo Zend_Json::encode($this->translate('Department')); ?> + ' "' + $(this).text() + '"',
+                                        url: $(this).attr('href'),
+                                        maximized: true,
+                                        bubble: true
+                                    })
+                                    return false;
+                                });
+                    });
+                    $("#list").resetSelection(); self.selectedRow = null; $("#action-edit, #action-remove").button('disable');
+                    $("#action-create, #action-grid-refresh").button('enable');
+                },
+                onSelectRow: function() {
+                    if (self.selectedRow == grid.getGridParam('selrow')) {
+                        $("#list").resetSelection(); self.selectedRow = null; $("#action-edit, #action-remove").button('disable');
+                    } else {
+                        self.selectedRow =  grid.getGridParam('selrow');
+                        $("#action-edit, #action-remove").button('enable');
+                    }
+                }
+            });
+
+            self.constructor.prototype.beforePageLayout.call(self);
+        }
+    });
+</script>

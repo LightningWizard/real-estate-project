@@ -1,0 +1,13 @@
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                   Styles for Lis_List_Filter form                                   *
+ *                                                                                                     *
+ *                                                                                                     *
+ *******************************************************************************************************/
+form.ui-jqgrid-filter {}
+form.ui-jqgrid-filter .double-filter {border:0px solid lime; text-align:right;}
+/*#request-date-double-filter .form-element{float:left;}*/
+form.ui-jqgrid-filter .double-filter .double-filter-label0 {float:left; margin-right:3px; line-height:1.7em;}
+form.ui-jqgrid-filter .double-filter .double-filter-label1 {display:inline-block; padding-right:2px;}
+form.ui-jqgrid-filter .double-filter .double-filter-label2 {display:inline-block; padding:0px 2px;}
+form.ui-jqgrid-filter .double-filter .form-element-item input {margin-left:0px; width:70px}

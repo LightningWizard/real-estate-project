@@ -1,0 +1,15 @@
+<div class="msg msg-error msg-error-404"><?php echo $this->translate('Error404Description!HTML!'); ?></div>
+<script type="text/javascript" language="javascript">
+    $('<div />')
+        .append($('.msg-error-404'))
+        .dialog({
+            modal: true,
+            closeOnEscape: false,
+            width: 500,
+            resizable: false,
+            show: 'bounce',
+            title: <?php echo Zend_Json::encode($this->translate('Error404Title')); ?>
+         })
+         .css('overflow', 'hidden')
+         .parent().find('.ui-dialog-titlebar-close').remove();
+</script>

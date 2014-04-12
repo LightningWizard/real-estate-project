@@ -1,0 +1,321 @@
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildToolbars();
+        },
+        buildToolbars: function() {
+            var self = this,
+                grid = $('#list'),
+                buttons = new Object();
+            <?php if($this->acl->assert($this->aclResource, 'execute')) { ?>
+            var controls = new Object();
+            controls[<?php echo Zend_Json::encode($this->translate('ExecuteCommand')); ?>] = function() {
+                var uploadForm = $(this).find('form:eq(0)');
+                uploadForm.submit();
+                $(this).dialog('destroy');
+                $(this).unbind().remove();
+            };
+            controls[<?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>] = function() {
+                $(this).dialog('destroy');
+                $(this).unbind().remove();
+            };
+            var executeAction = function() {
+                    var uploadForm = $('<form />');
+                    $('<div />').append(
+                       uploadForm.attr({
+                           "method": "post",
+                           "enctype": "multipart/form-data",
+                           "action": "/workspace/coupling-with-journal/execute"
+                       }).append(
+                            $('<div />').addClass('form-elements').append(
+                                $('<div />').css("margin-bottom", "5px").text(<?php echo Zend_Json::encode($this->translate('TextFileForCoupling')); ?>),
+                                $('<div />').addClass('form-element').append(
+                                    $('<div />').addClass('form-element-item').append(
+                                        $('<input />').attr({'type': 'file', 'id': 'fileToUpload', "name": "fileToUpload"})
+                                    )
+                                )
+                            )
+                        )
+                    )
+                    .dialog({
+                        title: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                        modal: true,
+                        width: 250,
+                        buttons: controls
+                    });
+                    uploadForm.ajaxForm({
+                        url: '/workspace/coupling-with-journal/execute',
+                        beforeSend: function() {
+                            $('#action-execute').button('disable');
+                            $('<div />')
+                                .addClass('ui-dialog-loader')
+                                .prependTo($('body'));
+                        },
+                        complete: function() {
+                            $('.ui-dialog-loader').remove();
+                            $('#action-execute').button('enable');
+                        },
+                        success: function(data){
+                            var isSuccess = !data.error,
+                            grid = $('#list'),
+                            notifire  = $('<div />')
+                                            .addClass('ui-widget')
+                                            .css({
+                                                width: '300px',
+                                                position: 'absolute',
+                                                top: '0',
+                                                right: '0',
+                                                marginTop: '55px',
+                                                marginRight: '55px',
+                                                fontSize: '1em',
+                                                zIndex: '100000'
+                                            }),
+                            container = $('<div />')
+                                            .addClass('ui-corner-all')
+                                            .addClass( isSuccess ? 'ui-state-highlight' : 'ui-state-error')
+                                            .css({
+                                                padding: '5px'
+                                            })
+                                            .appendTo(notifire),
+                            box       = $('<p />')
+                                            .css({
+                                                textAlign: 'justify'
+                                            })
+                                            .text( isSuccess ? data.message + ': ' + data.rowCount: data.message)
+                                            .appendTo(container),
+                            icon      = $('<span />')
+                                            .addClass('ui-icon')
+                                            .addClass( isSuccess ? 'ui-icon-info' : 'ui-icon-alert')
+                                            .css({
+                                                'float': 'left',
+                                                marginRight: '0.3em'
+                                            })
+                                            .prependTo(box);
+
+                            notifire.appendTo('body');
+                            var deleteNotifire = function() {
+                                    notifire.fadeOut(1000, function() {notifire.unbind().remove()});
+                                },
+                                timer = setTimeout(deleteNotifire, 5000);
+                            notifire
+                                .click(function() {
+                                    clearTimeout(timer);
+                                    deleteNotifire();
+                                })
+                                .css('cursor', 'pointer');
+                           grid.trigger('reloadGrid');
+                        }
+                    });
+                };
+            buttons[<?php echo Zend_Json::encode($this->translate('ExecuteCommand')) ?>] = {
+               id: 'action-execute',
+               icon: '/img/icons/24x24/process_run.gif',
+               action: executeAction
+            };
+            <?php } ?>
+            <?php if($this->acl->assert('workspace::real-estate-proposals', 'edit')) {?>
+            buttons[<?php echo Zend_Json::encode($this->translate('TransferToMainTableCommand')) ?>] = {
+               id: 'action-transfer',
+               icon: '/img/icons/24x24/copy.png',
+               action: function(){
+                     var rowId = grid.getGridParam('selrow');
+                     $('<div />').iwindow({
+                        title: <?php echo Zend_Json::encode($this->translate('NewRealEstateProposal')); ?>,
+                        url: '/workspace/real-estate-proposals/item/coupling-unit-id/' + rowId + '/__command__/<?php echo md5('edit' . Zend_Session::getId()); ?>',
+                        maximized: true,
+                        bubble: true
+                    });
+               }
+            };
+            <?php } ?>
+            <?php if($this->acl->assert($this->aclResource, 'remove')) { ?>
+            var deleteCommandAction = function() {
+                 $('<div />')
+                        .html(<?php echo Zend_Json::encode($this->translate('DeleteRoleConfirm!HTML!')); ?>)
+                        .dialog({
+                            title: <?php echo Zend_Json::encode($this->translate('DeleteAction')); ?>,
+                            modal: true,
+                            resizable: false,
+                            width: 400,
+                            buttons: {
+                                <?php echo Zend_Json::encode($this->translate('DeleteCommand')); ?>: function() {
+                                    var dialog = $(this);
+                                    $.ajax({
+                                        async: false,
+                                        url: '/workspace/coupling-with-kurer/delete',
+                                        data: {'items[]': $('#list').getGridParam('selarrrow')},
+                                        type: 'POST',
+                                        beforeSend: function() {
+                                            $('<div />')
+                                                .addClass('ui-dialog-loader')
+                                                .prependTo(dialog.children().css({opacity: 0}).end());
+                                        },
+                                        complete: function() {
+                                            grid.trigger('reloadGrid');
+                                            dialog.dialog('destroy').remove();
+                                        }
+                                    })
+                                },
+                                <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>: function() {
+                                    $(this).dialog('destroy').remove();
+                                }
+                            }
+                        });
+            };
+            buttons[<?php echo Zend_Json::encode($this->translate('DeleteCommand')) ?>] = {
+               id: 'action-remove',
+               icon: '/img/icons/24x24/remove.gif',
+               action: deleteCommandAction
+            };
+            var truncateCommandAction = function() {
+                  $('<div />')
+                        .html(<?php echo Zend_Json::encode($this->translate('TruncateCouplingTableConfirm!HTML!')); ?>)
+                        .dialog({
+                            title: <?php echo Zend_Json::encode($this->translate('TruncateAction')); ?>,
+                            modal: true,
+                            resizable: false,
+                            width: 400,
+                            buttons: {
+                                <?php echo Zend_Json::encode($this->translate('TruncateCommand')); ?>: function() {
+                                    var dialog = $(this);
+                                    $.ajax({
+                                        async: false,
+                                        url: '/workspace/coupling-with-kurer/truncate',
+                                        data: {'items[]': $('#list').getGridParam('selarrrow')},
+                                        type: 'POST',
+                                        beforeSend: function() {
+                                            $('<div />')
+                                                .addClass('ui-dialog-loader')
+                                                .prependTo(dialog.children().css({opacity: 0}).end());
+                                        },
+                                        complete: function() {
+                                            grid.trigger('reloadGrid');
+                                            dialog.dialog('destroy').remove();
+                                        }
+                                    })
+                                },
+                                <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>: function() {
+                                    $(this).dialog('destroy').remove();
+                                }
+                            }
+                        });
+            };
+            buttons[<?php echo Zend_Json::encode($this->translate('TruncateCommand')) ?>] = {
+               id: 'action-truncate',
+               icon: '/img/icons/24x24/delete-all.png',
+               action: truncateCommandAction
+            };
+            <?php } ?>
+            <?php if($this->acl->assert($this->aclResource, 'read')) { ?>
+            buttons[<?php echo Zend_Json::encode($this->translate('PrintCommand')) ?>] = {
+               id: 'action-print',
+               icon: '/img/icons/24x24/print.png',
+               action: function(){
+                   var printForm = $('<form/>').attr({
+                            "target" : "couplingJournalPrint",
+                            "action" : "/system/main/print",
+                            "method" : "post"
+                        });
+
+                   var gridUrl = decodeURI(grid.getGridParam('url')),
+                       matches = gridUrl.match(/filter\[\w*\]=[^&]*/g),
+                       fieldData, fieldName, fieldValue;
+                   if(matches != null) {
+                       for(var i = 0, j = matches.length; i < j; i++) {
+                           fieldData = matches[i].split('=');
+                           fieldName = fieldData[0];
+                           fieldValue = fieldData[1];
+                           printForm.append(
+                              $('<input />').attr({type: 'hidden', name: fieldName}).val(fieldValue)
+                           );
+                       }
+
+                   }
+                   var postData  = grid.getGridParam('postData');
+                   if('sidx' in postData) {
+                       printForm.append(
+                          $('<input />').attr({type: 'hidden', name: 'sidx'}).val(postData['sidx'])
+                       );
+                   }
+                   if('sord' in postData) {
+                       printForm.append(
+                          $('<input />').attr({type: 'hidden', name: 'sord'}).val(postData['sord'])
+                       );
+                   }
+                   printForm.append(
+                      $('<input />').attr({type: 'hidden', name: 'moduleName'}).val('workspace'),
+                      $('<input />').attr({type: 'hidden', name: 'controllerName'}).val('coupling-with-journal'),
+                      $('<input />').attr({type: 'hidden', name: 'actionName'}).val('print')
+                   );
+                   printForm.hide().appendTo($('body')).submit();
+               }
+            };
+            <?php } ?>
+            self.createToolbar(buttons);
+
+            self.createGridToolbar(
+                <?php echo Zend_Json::encode($this->translate('RefreshCommand')); ?>,
+                false,
+                false,
+                false
+            );
+        },
+        beforePageLayout: function(){
+            var self = this;
+            var grid = $('#list');
+            if(grid.size()){
+                grid.setGridParam({
+                    gridComplete: function(){
+                        self.setActionsToolbarButtonsState();
+                        self.setGridToolbarButtonsState();
+                        $('#action-execute').button('enable');
+                        var selectedRows = grid.getGridParam('selarrrow');
+                        $('#action-transfer').button(selectedRows.length == 1 ? 'enable': 'disable');
+                    },
+                    onSelectRow: function() {
+                        self.setActionsToolbarButtonsState();
+                        self.setGridToolbarButtonsState();
+                        var selectedRows = grid.getGridParam('selarrrow');
+                        $('#action-transfer').button(selectedRows.length == 1 ? 'enable': 'disable');
+                    },
+                    onSelectAll: function(){
+                        self.setActionsToolbarButtonsState();
+                        self.setGridToolbarButtonsState();
+                        var selectedRows = grid.getGridParam('selarrrow');
+                        $('#action-transfer').button(selectedRows.length == 1 ? 'enable': 'disable');
+                    }
+                });
+            }
+            $('div.form-elements').width(650).each(function(){
+                var $formElements = $(this),
+                    $wrapperLeft = $('<div />').addClass('form-elements-left'),
+                    $wrapperRight = $('<div />').addClass('form-elements-right'),
+                    $evenElements = $formElements.find('div.form-element:even'),
+                    $oddElements = $formElements.find('div.form-element:odd');
+                $wrapperLeft.append($evenElements);
+                $wrapperRight.append($oddElements);
+                $formElements.append($wrapperLeft, $wrapperRight);
+                $wrapperLeft.width($formElements/2).css('float', 'left');
+                $wrapperRight.width($formElements/2).css('float', 'right');
+            });
+        },
+        afterPageLayout: function() {
+            var self = this;
+            self.constructor.prototype.afterPageLayout.call(self);
+            $('#dateFrom').each(function(){$(this).width($(this).width() - 20);}).datepicker({
+                showOn: 'button',
+                buttonImage: '/img/icons/16x16/calendar.gif',
+                buttonImageOnly: true,
+                dateFormat: 'dd.mm.yy'
+            });
+            $('#dateTo').each(function(){$(this).width($(this).width() - 20);}).datepicker({
+                showOn: 'button',
+                buttonImage: '/img/icons/16x16/calendar.gif',
+                buttonImageOnly: true,
+                dateFormat: 'dd.mm.yy'
+            });
+        }
+    });
+</script>

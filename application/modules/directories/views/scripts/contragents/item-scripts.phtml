@@ -1,0 +1,175 @@
+<link href="/css/blanks/contragent.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildSpecialLayout();
+            self.buildToolbars();
+            self.decorateElements();
+
+        },
+        buildSpecialLayout: function() {
+            var self = this;
+            $('fieldset').collapsibleFieldset().filter('#fieldset-notice').find('> legend').click();
+            self.buildPhonesGrid();
+        },
+        buildPhonesGrid: function() {
+            var self = this,
+                phonesGrid = $('<table />').attr('id', 'phones-grid').addClass('scroll'),
+                phonesGridPager = $('<div />').attr('id', 'phones-grid-pager').addClass('scroll'),
+                phonesGridHolder = $('<div />').attr('id', 'phones-grid-holder').append(
+                                            phonesGrid,
+                                            phonesGridPager
+                                     );
+                $('#contragentPhone').parent().append(phonesGridHolder).end().remove();
+                var validatePhone = function(phoneId, phoneNumber){
+                    if(!/^\d+$/.test(phoneNumber)) {
+                        errorMessage = <?php echo Zend_Json::encode($this->translate('PhoneContainOnlyDigits')); ?>;
+                        return [false, errorMessage];
+                    }
+                    var grid = $(this),
+                        dataIds = grid.getDataIDs(),
+                        rowData,
+                        uniqueInGrid = true;
+                    for(var i = 0, j = dataIds.length;   i < j; i++){
+                        rowData = grid.getRowData(dataIds[i]);
+                        if(rowData.Phone == phoneNumber){
+                            if(phoneId == null) {
+                                uniqueInGrid = false;
+                                break;
+                            }
+                            else if(rowData.id != phoneId) {
+                                uniqueInGrid = false;
+                                break;
+                            }
+                        }
+                    }
+                    if(!uniqueInGrid){
+                        errorMessage = <?php echo Zend_Json::encode($this->translate('PhoneAlreadyExists')); ?>;
+                        return [false, errorMessage];
+                    }
+                    var uniqueInDb = true,
+                        uniqueInDbData,
+                        loaderIndicator = $('<div />').addClass('ui-dialog-loader');
+                    $.ajax({
+                        url: '/directories/contragents/search-by-phone',
+                        type: 'POST',
+                        data: {
+                            'phone': phoneNumber
+                        },
+                        dataType: 'json',
+                        async: false,
+                        beforeSend: function(){
+                            $('body').prepend(loaderIndicator);
+                        },
+                        complete: function(){
+                            loaderIndicator.remove();
+                        },
+                        success: function(data)  {
+                            if(data.id && data.id != <?php echo Zend_Json::encode($this->id);?>){
+                                uniqueInDb = false;
+                                errorMessage = <?php echo Zend_Json::encode($this->translate('AnotherContragentPhone')); ?>;
+                                errorMessage = errorMessage.replace('%owner%', data.title);
+                                uniqueInDbData = [false, errorMessage];
+                            }
+                        }
+                    });
+                    if(!uniqueInDb){
+                        return uniqueInDbData;
+                    }
+                    return [true, ""];
+
+                };
+                var gridParams = {
+                    datatype: 'local',
+                    colNames: [
+                        'id',
+                        <?php echo Zend_Json::encode($this->translate('Phone')); ?>
+                    ],
+                    colModel: [
+                        {name:'id',index:'id',hidden: true, key: true},
+                        {name:'Phone',index:'Phone',width:205,resizable:false,sortable:false, editable: true}
+                    ],
+                    multiselect: false,
+                    width: 400,
+                    pager: phonesGridPager,
+                    pgbuttons: false,
+                    pginput: false,
+                    data: <?php echo Zend_Json::encode($this->contragentPhones) ?>,
+                    rowNum: 1000,
+                    dataProxy: function (ajaxOptions, oper_grid){
+                        var oper = ajaxOptions.data.oper,
+                            phoneNumber = ajaxOptions.data.Phone,
+                            phoneId = ajaxOptions.data.id,
+                            status;
+                        if(oper != 'del') {
+                            if(phoneId == '_empty') {
+                                phoneId = null;
+                            }
+                            var validateData = validatePhone.call(this, phoneId, phoneNumber);
+                            if(!validateData[0]) {
+                                return validateData;
+                            }
+                        }
+                        if($.isFunction(ajaxOptions.complete)){
+                            ajaxOptions.complete(ajaxOptions.data, 'success');
+                        }
+                    }
+                };
+                $('#phones-grid').jqGrid(gridParams)
+                                 .navGrid('#phones-grid-pager', {add: true, edit: true, del: true, refresh: true, search: false},
+                                     {useDataProxy: true, closeAfterEdit: true, reloadAfterSubmit: false},
+                                     {useDataProxy: true, closeAfterAdd :true, reloadAfterSubmit: false, addedrow:'last'},
+                                     {useDataProxy: true},
+                                     {},
+                                     {}
+                                 );
+
+        },
+        buildToolbars: function() {
+            var self = this,
+                buttons = new Object();
+            <?php if ($this->blankEditable) { ?>
+             buttons[<?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>] = {
+                id: 'action-save',
+                icon: '/img/icons/24x24/save.gif',
+                action: function() {
+                    $('body').prepend(
+                        $('<div />')
+                            .addClass('ui-dialog-loader')
+                            .css({zIndex: 100})
+                    );
+                    var blank = $('#blank-contragent'),
+                        rowData,
+                        phonesGrid = $('#phones-grid'),
+                        gridIds = phonesGrid.getDataIDs();
+                    for(var i = 0, j = gridIds.length; i < j; i++){
+                        rowData = phonesGrid.getRowData(gridIds[i])
+                        blank.append('<input type="hidden" name="phones[' + gridIds[i] + ']" value="' + rowData.Phone +'" />');
+                    }
+
+                    blank
+                        .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                        .submit();
+                }
+             };
+             buttons[<?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>] ={
+                id: 'action-reset',
+                icon: '/img/icons/24x24/reset.gif',
+                action: function() {
+                    window.location.reload();
+                }
+             };
+             self.createToolbar(buttons);
+            <?php } else { ?>
+                //no available toolbars
+            <?php } ?>
+        },
+        decorateElements: function() {
+            <?php if(!$this->blankEditable) {?>
+                  $(':input').datepicker('disable');
+            <?php } ?>
+        }
+    });
+</script>

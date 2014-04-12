@@ -1,0 +1,14 @@
+<div id="tab-holder">
+    <div id="tab-block-1"><?php echo $this->blank; ?></div>
+    <?php if($this->id) { ?>
+    <div id="tab-block-2">
+        <form>
+            <div id="dropZone">
+                Для загрузки, перетащите файл сюда.
+            </div>
+        </form>
+        <table id="gallery-grid"></table>
+        <div id="gallery-grid-pager"></div>
+    </div>
+    <?php } ?>
+</div>

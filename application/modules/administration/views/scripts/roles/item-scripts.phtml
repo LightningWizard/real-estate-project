@@ -1,0 +1,189 @@
+<link href="/css/blanks/role.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+
+            self.buildSpecialLayout();
+            self.buildToolbars();
+            self.decorateElements();
+        },
+        buildSpecialLayout: function() {
+            var self = this;
+            self.buildPermissionsList();
+            self.buildTabs();
+
+            $('fieldset').collapsibleFieldset().filter('#fieldset-notice').find('> legend').click();
+        },
+        buildTabs: function() {
+            var blank = $('#blank-role'),
+                tabHolder = $('<div/>'),
+                divs = blank.children().filter('div'),
+                block1 = $('<div/>').attr('id', 'blank-block-1')
+                                    .append(divs.not('#tabholder-permissions')),
+                block2 = $('<div/>').attr('id', 'blank-block-2')
+                                    .append(divs.filter('#tabholder-permissions')),
+                tabTitle = $('<ul/>').append(
+                    $('<li/>').append($('<a />')
+                                .attr('href', '#blank-block-1')
+                                .text(<?php echo Zend_Json::encode($this->translate('MainData')); ?>)),
+                    $('<li />').append($('<a />')
+                                 .attr('href', '#blank-block-2')
+                                 .text(<?php echo Zend_Json::encode($this->translate('RolePermissions')) ?>))
+                );
+           tabHolder.append(tabTitle, block1, block2);
+           tabHolder.prependTo(blank).tabs({selected: 0, height: 'auto'});
+        },
+        buildPermissionsList: function (){
+            var self = this;
+            var blank = $('#blank-role'),
+                tabHolder = $('<div />').attr('id', 'tabholder-permissions'),
+                tabBar = $('<ul />');
+            blank.prepend(tabHolder);
+            <?php foreach ($this->permissionGroups as $groupId => $permGroup) { ?>
+                 var suffix = <?php echo (string)Zend_Json::encode($groupId); ?>;
+                 $('<div />').attr('id', 'permissions-block-' + suffix)
+                              .append(self.buildPermissionsGroupList(suffix))
+                              .appendTo(tabHolder);
+                 tabBar.append(
+                      $('<li />').append(
+                          $('<a />').attr('href', '#permissions-block-'+ suffix)
+                                    .text(<?php echo Zend_Json::encode($this->translate($permGroup['title'])); ?>)
+                      )
+                  );
+                  $('#permissions-grid-' + suffix).setGridParam({
+                        gridComplete: function() {
+                            $(this).parents('.ui-jqgrid:eq(0)').find('.loading').hide();
+                            $(this).find('td > :checkbox').each(function(){
+                                var el = $(this).hide(),
+                                    placeholder = $('<img />'),
+                                    sync = function() {
+                                        if (el.is(':checked')) {
+                                            placeholder.removeClass('bool-false').addClass('bool-true').attr({"src":"/img/icons/16x16/tick.gif"});
+                                        } else {
+                                            placeholder.removeClass('bool-true').addClass('bool-false').attr({"src":"/img/icons/16x16/cross.gif"});
+                                        }
+                                    }
+                                sync();
+                                placeholder.insertAfter(el);
+                                <?php if ($this->blankEditable) {?>
+                                el.parent().click(function() {
+                                el[0].checked = !el[0].checked;
+                                sync();
+                                });
+                                <?php }?>
+                            });
+                        }
+
+                    })[0].addJSONData({
+                        page: 1,
+                        total: 1,
+                        records: <?php echo count($permGroup['items']); ?>,
+                        rows: <?php echo Zend_Json::encode($permGroup['items']); ?>
+                    });
+
+            <?php } ?>
+            tabHolder.prepend(tabBar)
+                     .tabs({selected: 0, height: 'auto'});
+        },
+        buildPermissionsGroupList: function(suffix) {
+            var grid   = $('<table />').attr('id', 'permissions-grid-' + suffix).addClass('scroll'),
+                pager  = $('<div />').attr('id', 'permissions-grid-' + suffix + '-pager').addClass('scroll');
+
+            var node = $('<div/>').addClass('fieldset-wrapper')
+                                  .append(
+                                    $('<fieldset />').append(grid, pager).addClass('fieldset-visible')
+                                  )
+                                  .appendTo($('#blank-role'))
+
+            grid.jqGrid({
+                datatype: 'local',
+                colNames: [
+                   <?php echo Zend_Json::encode($this->translate('Resource')); ?>,
+                   <?php echo Zend_Json::encode($this->translate('PermRead')); ?>,
+                   <?php echo Zend_Json::encode($this->translate('PermEdit')); ?>,
+                   <?php echo Zend_Json::encode($this->translate('PermRemove')); ?>,
+                   <?php echo Zend_Json::encode($this->translate('PermExecute')); ?>,
+                   <?php echo Zend_Json::encode($this->translate('PermExtrim')); ?>
+                ],
+                colModel: [
+                    {name:'Resource',index:'Resource',width:425,resizable:false,sortable:false},
+                    {name:'PermRead',index:'PermRead',width:60,resizable:false,sortable:false,align:'center'},
+                    {name:'PermEdit',index:'PermEdit',width:100,resizable:false,sortable:false,align:'center'},
+                    {name:'PermRemove',index:'PermRemove',width:65,resizable:false,sortable:false,align:'center'},
+                    {name:'PermExecute',index:'PermExecute',width:80,resizable:false,sortable:false,align:'center'},
+                    {name:'PermExtrim',index:'PermExtrim',width:73,resizable:false,sortable:false,align:'center'}
+                ],
+                sortname: 'Resource',
+                height: 400,
+                width: 890,
+                viewrecords: true,
+                pager: pager,
+                caption: false,
+                shrinkToFit: false,
+                multiselect: false,
+                pgbuttons: false,
+                pginput: false,
+                treeGrid: true,
+                treeGridModel: "adjacency",
+                ExpandColumn: "Resource",
+                ExpandColClick: true,
+                expandOnLoad: true
+            });
+
+            return node;
+        },
+        buildToolbars: function() {
+            var self = this;
+            <?php if ($this->blankEditable) { ?>
+             self.createToolbar({
+                <?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>: {
+                    id: 'action-save',
+                    icon: '/img/icons/24x24/save.gif',
+                    action: function() {
+                        $('#blank-role')
+                            .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                            .submit();
+                    }
+                },
+                <?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>: {
+                    id: 'action-reset',
+                    icon: '/img/icons/24x24/reset.gif',
+                    action: function() {
+                        window.location.reload();
+                    }
+                }
+            });
+            <?php } else { ?>
+            <?php } ?>
+        },
+        decorateElements: function() {
+            var self = this;
+            <?php if ($this->blankEditable) { ?>
+            var popupPhrases = {
+                cancel: <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>,
+                select: <?php echo Zend_Json::encode($this->translate('SelectCommand')); ?>,
+                breakConnection: <?php echo Zend_Json::encode($this->translate('BreakConnectionCommand')); ?>,
+                alert: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                noSelection: <?php echo Zend_Json::encode($this->translate('NoObjectSelectedLinkingConfirm!HTML!')); ?>,
+                ok: <?php echo Zend_Json::encode($this->translate('Ok')); ?>
+            };
+            $('#departmentTitle').linkableField({
+                visibleParam: 'title',
+                basicUrl: '/administration/departments',
+                idHolder: '#departmentId',
+                popupPhrases: popupPhrases
+            });
+            $('#specializationTitle').linkableField({
+                visibleParam: 'title',
+                basicUrl: '/administration/specializations',
+                idHolder: '#specializationId',
+                popupPhrases: popupPhrases
+            });
+            <?php } else { ?>
+            $(':input').attr('disabled', 'disabled').datepicker('disable');
+            <?php } ?>
+        }
+    });
+</script>

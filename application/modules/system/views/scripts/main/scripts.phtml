@@ -1,0 +1,40 @@
+<script type="text/javascript" language="javascript">
+
+    $(document).ready(function(){        var setCloseConfirm = function() {
+            window.onbeforeunload = function(event) {
+                event = event || window.event;
+                event.returnValue = <?php echo Zend_Json::encode($this->translate('ApplicationWindowCloseConfirm')); ?>;
+            }
+        };
+       var unsetCloseConfirm = function() {
+            window.onbeforeunload = null;
+        }
+        $('#application-close').button({
+            icon: '/img/icons/32x32/exit.gif',
+            iconSize: 32,
+            height: '32px',
+            showtext: true,
+            action: function() {
+                $('<div />')
+                    .html(<?php echo Zend_Json::encode($this->translate('LogoutConfirmDescription!HTML!')); ?>)
+                    .dialog({
+                        resizable: false,
+                        width: 400,
+                        modal: true,
+                        title: <?php echo Zend_Json::encode($this->translate('LogoutConfirmTitle')); ?>,
+                        buttons: {
+                            <?php echo Zend_Json::encode($this->translate('LogoutConfirmYes')); ?>: function() {
+                                unsetCloseConfirm();
+                                document.location = '/system/authorization/logout';
+                            },
+                            <?php echo Zend_Json::encode($this->translate('LogoutConfirmNo')); ?>: function() {
+                                setCloseConfirm();
+                                $(this).dialog('destroy').remove();
+                            }
+                        }
+                    });
+            }
+        });
+        setCloseConfirm();
+    });
+</script>

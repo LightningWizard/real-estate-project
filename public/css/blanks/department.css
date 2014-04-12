@@ -1,0 +1,9 @@
+#blank-department fieldset {width:860px;margin:0 auto 5px auto;}
+
+#blank-department #fieldset-main .form-element-label {width: 150px;}
+#blank-department #fieldset-main .form-element-item {width: 690px;}
+#blank-department #fieldset-main textarea {height:3.6em;}
+#blank-department #fieldset-main .form-element-item .ui-linkedfield {width:670px;}
+
+#blank-department #fieldset-notice .form-elements {float:none;}
+#blank-department #fieldset-notice #note {width:100%;height:4.8em;}

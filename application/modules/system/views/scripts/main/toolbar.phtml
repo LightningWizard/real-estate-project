@@ -1,0 +1,6 @@
+<div id="application-close"><?php echo $this->escape($this->translate('Logout')); ?></div>
+<div id="application-user" class="ui-state-default ui-corner-all">
+    <div><?php echo $this->escape($this->translate('User')); ?>:</div>
+    <div><?php echo $this->escape(Zend_Registry::get('currentUser')->getFormatedName('LF')); ?></div>
+</div>
+<div id="application-title"><?php echo $this->escape($this->translate('ApplicationTitle')); ?></div>

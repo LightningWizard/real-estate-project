@@ -1,0 +1,51 @@
+<link href="/css/blanks/street-type.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildSpecialLayout();
+            self.buildToolbars();
+            self.decorateElements();
+            
+        },
+        buildSpecialLayout: function() {
+            $('fieldset').collapsibleFieldset().filter('#fieldset-notice').find('> legend').click();
+        },
+        buildToolbars: function() {
+            var self = this,
+                buttons = new Object();
+            <?php if ($this->blankEditable) { ?>
+             buttons[<?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>] = {
+                id: 'action-save',
+                icon: '/img/icons/24x24/save.gif',
+                action: function() {
+                    $('body').prepend(
+                        $('<div />')
+                            .addClass('ui-dialog-loader')
+                            .css({zIndex: 100})
+                    );
+                    $('#blank-street-type')
+                        .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                        .submit();
+                }
+             };
+             buttons[<?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>] ={
+                id: 'action-reset',
+                icon: '/img/icons/24x24/reset.gif',
+                action: function() {
+                    window.location.reload();
+                }
+             };
+             self.createToolbar(buttons);
+            <?php } else { ?>
+                //no available toolbars
+            <?php } ?>
+        },
+        decorateElements: function() {
+            <?php if(!$this->blankEditable) {?>
+                  $(':input').datepicker('disable');  
+            <?php } ?>
+        }
+    });
+</script>

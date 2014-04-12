@@ -1,0 +1,18 @@
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        $("#list").jqGrid({
+            url: "<?php echo $this->source; ?>",
+            datatype: "json",
+            treedatatype: "json",
+            mtype:"GET",
+            colNames: <?php echo $this->colNames; ?>,
+            colModel: <?php echo $this->colModel; ?>,
+            height: "auto",
+            pager: "#pager",
+            caption: false,
+            treeGrid: true,
+            treeGridModel: "adjacency",
+            ExpandColumn: "title"
+        });
+    });
+</script>

@@ -1,0 +1,293 @@
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                   General element styles                                            *
+ *                      (default browser setings must be unset by reset.css)                           *
+ *                                                                                                     *
+ *******************************************************************************************************/
+
+html, body {
+	background-color: #d9e9f3;
+    font-size: 10pt;
+    font-family: Arial,Helvetica,sans-serif;
+    border: none;
+}
+strong {
+    font-weight: bolder;
+}
+p {
+    margin: 5px 0;
+}
+sup {
+    vertical-align: super;
+}
+sub {
+    vertical-align: sub;
+}
+table tr th {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+}
+table tr td {
+    text-align: left;
+    vertical-align: top;
+}
+ul {
+    margin: 0;
+    padding-left: 15px;
+}
+ul li {
+    list-style-type: square;
+}
+.fieldset-visible {
+    border: #a6c9e2 solid 1px;
+    margin: 0 0 15px 0;
+    padding: 15px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.fieldset-visible legend {
+    border: #a6c9e2 solid 1px;
+    padding: 0.3em 0.5em;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+/*ie*/
+html>body .fieldset-visible {
+    overflow: hidden;
+}
+html>body .fieldset-visible legend {
+    margin-bottom:10px;
+}
+/*webkit*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .fieldset-visible legend {
+        position:relative;
+        top:1px;
+    }
+}
+
+.fieldset-visible textarea {margin-bottom:2px;height:2.4em;}
+.fieldset-visible input.ui-linkedfield {margin-bottom:2px;}
+
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                    Form elements layout                                             *
+ *                                                                                                     *
+ *******************************************************************************************************/
+form, fieldset {overflow:auto;}
+.filedset-wrapper{margin:0; padding:0;}
+.form-elements {float:left}
+.form-element {clear:both; text-align:right; line-height:1.6em;}
+.form-element-label {float:left; padding-right:1em; text-align:left;}
+.form-element-item {display:inline-block; text-align:left; width:200px;}
+.form-element-item .input-field  {width:100%;}
+.form-element-description, .form-element-errors {font-size:0.8em;line-height:1.1em;}
+.form-element-errors {color:red;}
+
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                    Main application window                                          *
+ *                                                                                                     *
+ *******************************************************************************************************/
+.application-header {
+    background: transparent url("/img/ui/ui-bg_gloss-wave_12_f1a526_1x100.png") repeat-x center
+    padding: 5px 23px 5px 10px;
+}
+.application-header .pin-button {
+    bottom: 5px;
+}
+#application-title {
+    padding:0px 10px;
+    color: white;
+    font-family: Arial,sans-serif;
+    font-size: 1.3em;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 36px;
+}
+#application-close {
+    float: right;
+    color:white;
+}
+#application-user {
+    float: right;
+    text-align: right;
+    margin-right: 10px;
+    padding: 2px 5px;
+    line-height: 16px;
+    color:white;
+}
+#application-message {
+    float: right;
+    background: #fad42e;
+    border: 2px solid #FF0000;
+    text-align: right;
+    margin-right: 10px;
+    padding: 2px 5px;
+    line-height: 16px;
+    display: none;
+}
+.application-footer, .page-footer, #page-holder-filter {
+    padding: 2px 20px 2px 2px;
+}
+#page-holder-filter {
+    background-position: left -40px;
+    background-color: #609ecd;
+}
+.application-footer, .page-footer {
+    overflow: hidden;
+}
+#application-navigation {
+    padding: 0px;
+    overflow: hidden;
+}
+#application-navigation * {
+    overflow-x: hidden;
+}
+#application-navigation a {
+    outline: none;
+}
+#application-navigation .ui-accordion-header a{
+    padding-left:21px;
+
+}
+#application-navigation .ui-accordion-content {
+    padding: 0 5px 0 8px;
+}
+#application-navigation .ui-tree {
+    padding-bottom: 10px;
+}
+#page-toolbar {
+    padding-left: 3px;
+    overflow: hidden;
+    background-color: white; /*#d9e9f3*/
+    background-image: none;
+}
+#application-dockarea form {
+    overflow: hidden;
+}
+
+#page-holder-grid {
+    border: none;
+}
+#page-holder-filter {
+    border-bottom: none;
+    border-right: none;
+    border-left: none;
+}
+#application-toolbar{padding-right:24px;}
+#application-toolbar .ui-state-default{background:none; border-top:0px; border-right:0px; border-bottom:0px;}
+#application-toolbar .ui-state-hover{background: #fdf5ce url(/img/ui/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x;}
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                      System output styles                                           *
+ *                                                                                                     *
+ *******************************************************************************************************/
+
+.msg-error {
+	border: 1px solid #f25454;
+	background-color: #f0a6a6;
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	background-image: url(/img/failed.gif);
+	width: 400px;
+	min-height: 70px;
+	margin: 5px auto;
+	padding-left: 70px;
+	padding-top: 5px;
+}
+
+.msg-warning {
+   	border: 1px #fad42e solid;
+	background-color: #fbec88;
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	background-image: url(/img/attention.png);
+	width: 400px;
+	min-height: 70px;
+	margin: 5px auto;
+	padding-left: 70px;
+	padding-top: 5px;
+}
+
+.tc-proc-waitbar {
+    height: 20px;
+    margin: 10px;
+    background: transparent url('/img/progress.gif');
+    border: #4297d7 solid 1px;
+}
+
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                    Specific jquery ui styles                                        *
+ *                                                                                                     *
+ *******************************************************************************************************/
+.ui-helper-reset{line-height:2;}
+
+.ui-collapsablefieldset-title { cursor: pointer; }
+.ui-collapsablefieldset-hidecontent { display: none; }
+.ui-collapsablefieldset-closed { border-bottom-width: 0; border-left-width: 0; border-right-width: 0; -moz-border-radius: 0; -webkit-border-radius: 0; }
+
+.ui-dialog-buttonpane button {padding: .4em 1em;}
+.ui-dialog .ui-dialog-buttonpane{text-align:right;}
+.ui-dialog-content, .ui-dialog-buttonpane {}
+.ui-dialog .ui-resizable-se { background-image: none; }
+.ui-review-marker-wd {/*border: 1px solid #fad42e; background: #f0a6a6 url(/img/ui/ui-bg_flat_55_fbec88_40x100.png) 50% 50% repeat-x;*/ color: #363636;}
+.ui-review-marker-mw {/*border: 1px solid #fad42e; background: #f0a6a6 url(/img/ui/ui-bg_flat_55_fbec88_40x100.png) 50% 50% repeat-x; */color: #e17009;}
+.ui-review-marker-mm {/*border: 1px solid #fad42e; background: #f0a6a6 url(/img/ui/ui-bg_flat_56_fbec88_40x100.png) 50% 50% repeat-x;*/ color: #cd0a0a;}
+
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                    Specific page styles                                             *
+ *                                                                                                     *
+ *******************************************************************************************************/
+
+/*******************************************************************************************************
+ *  Authorization page                                                                                 *
+ *******************************************************************************************************/
+#authorization-dialog {
+    width: 600px;
+}
+#authorization-dialog-maincontanet {
+    padding-left:120px;
+    background: transparent url(/img/logo.png) 10px center no-repeat;
+}
+#authorization-dialog-maincontanet-apptitle {
+    margin-bottom:25px;
+    text-align:center;
+    font-weight:bold;
+}
+#authorization-dialog-maincontanet-appsubtitle {
+    text-align:center;
+    font-weight:bold;
+}
+#authorization-dialog-maincontanet-formcontainer {
+    width: 320px;
+    margin: 10px auto;
+    padding: 10px;
+    border: #a6c9e2 solid 1px;
+}
+#authorization-dialog-maincontanet-formcontainer .form-element-label {
+    width: 100px;
+}
+#authorization-dialog-footer {
+    text-align: right;
+}
+
+/*******************************************************************************************************
+ *  Additional Document Blank                                                                        *
+ *******************************************************************************************************/
+#blank-additional-document fieldset { width:600px; margin:10px auto 0 auto; }
+#blank-additional-document .form-element-label {width:75px; }
+#blank-additional-document #title,
+#blank-additional-document #description { width:505px; }
+#blank-additional-document #description { height:24em; }
+
+.jqgrow {cursor: pointer;}
+
+
+#create-shortcut {
+    position: absolute;left:100%;top:100%;width:32px;height:32px;margin-left:-32px;margin-top:-32px;cursor:pointer
+}

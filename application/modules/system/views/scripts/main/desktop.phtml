@@ -1,0 +1,22 @@
+<div id="create-shortcut" title="<?php echo $this->escape($this->translate('CreateDesctopShortcut')); ?>"><img src="/img/icons/32x32/go-jump.gif" /></div>
+<script type="text/javascript"  src="/js/google/gears_init.js"></script>
+<script type="text/javascript" language="javascript">
+    if (typeof google != 'undefined' && typeof google.gears != 'undefined') {
+        document.getElementById('create-shortcut').onclick = function() {
+            var desktop = google.gears.factory.create("beta.desktop");
+            desktop.createShortcut(
+                "Test Center",
+                "<?php echo $this->url(); ?>",
+                {
+                    "16x16": "/img/icons/16x16/certificate.png",
+                    "32x32": "/img/icons/32x32/certificate.png",
+                    "24x24": "/img/icons/24x24/certificate.png",
+                    "48x48": "/img/icons/48x48/certificate.png"
+                },
+                "Test Center Web-Application"
+            );
+        }
+    } else {
+        document.getElementById('create-shortcut').style.display = 'none';
+    }
+</script>

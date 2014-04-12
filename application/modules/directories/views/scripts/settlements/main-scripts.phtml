@@ -1,0 +1,99 @@
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildToolbars();
+        },
+        buildToolbars: function() {
+            var self = this,
+                grid = $('#list'),
+                buttons = new Object();
+            <?php if($this->acl->assert($this->aclResource, 'edit')) { ?>
+            var createElementAction = function() {
+                    $('<div />').iwindow({
+                        title: <?php echo Zend_Json::encode($this->translate('NewSettlement')); ?>,
+                        url: '/directories/settlements/item/__command__/<?php echo md5('edit' . Zend_Session::getId()); ?>',
+                        maximized: true,
+                        bubble: true
+                    });
+                },
+                editElementAction = function(){
+                     var rowId = grid.getGridParam('selrow');
+                     $('<div />').iwindow({
+                        title: self.getFullRowTitle(rowId),
+                        url: '/directories/settlements/item/id/' + rowId + '/__command__/<?php echo md5('edit' . Zend_Session::getId()); ?>',
+                        maximized: true,
+                        bubble: true
+                    });
+                };
+            buttons[<?php echo Zend_Json::encode($this->translate('AddCommand')) ?>] = {
+               id: 'action-create',
+               icon: '/img/icons/24x24/add.gif',
+               action: createElementAction
+            };
+            buttons[<?php echo Zend_Json::encode($this->translate('EditCommand')) ?>] = {
+               id: 'action-edit',
+               icon: '/img/icons/24x24/edit.gif',
+               action: editElementAction
+            };
+            <?php } ?>
+            <?php if($this->acl->assert($this->aclResource, 'remove')) {?>
+            var deleteCommandAction = function() {
+                 $('<div />')
+                        .html(<?php echo Zend_Json::encode($this->translate('DeleteRoleConfirm!HTML!')); ?>)
+                        .dialog({
+                            title: <?php echo Zend_Json::encode($this->translate('DeleteAction')); ?>,
+                            modal: true,
+                            resizable: false,
+                            width: 400,
+                            buttons: {
+                                <?php echo Zend_Json::encode($this->translate('DeleteCommand')); ?>: function() {
+                                    var dialog = $(this);
+                                    $.ajax({
+                                        async: false,
+                                        url: '/directories/settlements/delete',
+                                        data: {'items[]': $('#list').getGridParam('selarrrow')},
+                                        type: 'POST',
+                                        beforeSend: function() {
+                                            $('<div />')
+                                                .addClass('ui-dialog-loader')
+                                                .prependTo(dialog.children().css({opacity: 0}).end());
+                                        },
+                                        complete: function() {
+                                            grid.trigger('reloadGrid');
+                                            dialog.dialog('destroy').remove();
+                                        }
+                                    })
+                                },
+                                <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>: function() {
+                                    $(this).dialog('destroy').remove();
+                                }
+                            }
+                        });
+            };
+            buttons[<?php echo Zend_Json::encode($this->translate('DeleteCommand')) ?>] = {
+               id: 'action-remove',
+               icon: '/img/icons/24x24/remove.gif',
+               action: deleteCommandAction
+            };
+            <?php } ?>
+            self.createToolbar(buttons);
+
+            self.createGridToolbar(
+                <?php echo Zend_Json::encode($this->translate('RefreshCommand')); ?>,
+                false,
+                false,
+                false
+            );
+        },
+        getFullRowTitle: function(rowId) {
+            var data = $("#list").getRowData(rowId);
+            var title = <?php echo Zend_Json::encode($this->translate('Settlement')); ?>;
+            if (data.Title) {
+                title += (' "' + data.Title.replace(/<[^>]*>/g, "") + '"');
+            }
+            return title;
+        }
+    });
+</script>

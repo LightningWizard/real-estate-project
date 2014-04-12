@@ -1,0 +1,11 @@
+<script type="text/javascript" language="javascript">
+    (function() {
+        if (top != window) {
+            window.parent.$('iframe').each(function() {
+                if (this.contentWindow == window) {
+                    window.parent.$(this).parents('.ui-dialog-content').iwindow('destroy');
+                }
+            });
+        }
+    })();
+</script>

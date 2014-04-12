@@ -1,0 +1,387 @@
+<style>
+    .ui-helper-reset {line-height: 1}
+    .form-elements-left, .form-elements-right{float: left; margin-right: 20px;}
+    .fieldset-visible {padding: 0 5px; margin: 1px}
+    #tab-block-2 {padding: 5px;}
+</style>
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildSpecialLayout();
+            self.buildToolbars();
+        },
+        buildSpecialLayout: function() {
+            var self = this;
+            self.buildTabs();
+
+            var filter = $('body > .ui-layout-center #tab-block-2 form:eq(0)'),
+                grid = $('#main-grid');
+            filter.jqGridFilter({
+                grid: grid,
+                btnFilter: { show: false },
+                btnReset: { show: false }
+            });
+        },
+        buildTabs: function() {
+            var tabHolder = $('div.#tab-holder'),
+                tabTitle = $('<ul/>').attr({'id': 'tab-title'}).append(
+                    $('<li/>').append($('<a />')
+                              .attr('href', '#tab-block-1')
+                              .text(<?php echo Zend_Json::encode($this->translate('Data')); ?>)),
+                    $('<li />').append($('<a />')
+                               .attr('href', '#tab-block-2')
+                               .text(<?php echo Zend_Json::encode($this->translate('DataFilter')) ?>))
+                );
+           tabHolder.prepend(tabTitle)
+                    .tabs({selected: 0, height: 'auto'});
+        },
+        buildToolbars: function() {
+            var self = this,
+                grid = $('#main-grid'),
+                buttons = new Object();
+            <?php if($this->acl->assert($this->aclResource, 'edit')) { ?>
+            var createElementAction = function() {
+                    $('<div />').iwindow({
+                        title: <?php echo Zend_Json::encode($this->translate('NewRealEstateProposal')); ?>,
+                        url: '/workspace/real-estate-proposals/item/__command__/<?php echo md5('edit' . Zend_Session::getId()); ?>',
+                        maximized: true,
+                        bubble: true
+                    });
+                },
+                editElementAction = function(){
+                     var rowId = grid.getGridParam('selrow');
+                     $('<div />').iwindow({
+                        title: self.getFullRowTitle(rowId),
+                        url: '/workspace/real-estate-proposals/item/id/' + rowId + '/__command__/<?php echo md5('edit' . Zend_Session::getId()); ?>',
+                        maximized: true,
+                        bubble: true
+                    });
+                };
+            buttons[<?php echo Zend_Json::encode($this->translate('AddCommand')) ?>] = {
+               id: 'action-create',
+               icon: '/img/icons/24x24/add.gif',
+               action: createElementAction
+            };
+            buttons[<?php echo Zend_Json::encode($this->translate('EditCommand')) ?>] = {
+               id: 'action-edit',
+               icon: '/img/icons/24x24/edit.gif',
+               action: editElementAction
+            };
+            <?php } ?>
+            <?php if($this->acl->assert($this->aclResource, 'remove')) {?>
+            var deleteCommandAction = function() {
+                 $('<div />')
+                        .html(<?php echo Zend_Json::encode($this->translate('DeleteRoleConfirm!HTML!')); ?>)
+                        .dialog({
+                            title: <?php echo Zend_Json::encode($this->translate('DeleteAction')); ?>,
+                            modal: true,
+                            resizable: false,
+                            width: 400,
+                            buttons: {
+                                <?php echo Zend_Json::encode($this->translate('DeleteCommand')); ?>: function() {
+                                    var dialog = $(this);
+                                    $.ajax({
+                                        async: false,
+                                        url: '/workspace/real-estate-proposals/delete',
+                                        data: {'items[]': $('#main-grid').getGridParam('selarrrow')},
+                                        type: 'POST',
+                                        beforeSend: function() {
+                                            $('<div />')
+                                                .addClass('ui-dialog-loader')
+                                                .prependTo(dialog.children().css({opacity: 0}).end());
+                                        },
+                                        complete: function() {
+                                            grid.trigger('reloadGrid');
+                                            dialog.dialog('destroy').remove();
+                                        }
+                                    })
+                                },
+                                <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>: function() {
+                                    $(this).dialog('destroy').remove();
+                                }
+                            }
+                        });
+            };
+            buttons[<?php echo Zend_Json::encode($this->translate('DeleteCommand')); ?>] = {
+               id: 'action-remove',
+               icon: '/img/icons/24x24/remove.gif',
+               action: deleteCommandAction
+            };
+            <?php } ?>
+            <?php if($this->acl->assert($this->aclResource, 'read')) { ?>
+            buttons[<?php echo Zend_Json::encode($this->translate('PrintCommand')); ?>] = {
+               id: 'action-print',
+               icon: '/img/icons/24x24/print.png',
+               action: function(){
+                   var printForm = $('<form/>').attr({
+                            "target" : "realEstateProposalsPrint",
+                            "action" : "/system/main/print",
+                            "method" : "post"
+                        });
+
+                   var gridUrl = decodeURI(grid.getGridParam('url')),
+                       matches = gridUrl.match(/filter\[\w*\]=[^&]*/g),
+                       fieldData, fieldName, fieldValue;
+                   if(matches != null) {
+                       for(var i = 0, j = matches.length; i < j; i++) {
+                           fieldData = matches[i].split('=');
+                           fieldName = fieldData[0];
+                           fieldValue = fieldData[1];
+                           printForm.append(
+                              $('<input />').attr({type: 'hidden', name: fieldName}).val(fieldValue)
+                           );
+                       }
+
+                   }
+                   var postData  = grid.getGridParam('postData');
+                   if('sidx' in postData) {
+                       printForm.append(
+                          $('<input />').attr({type: 'hidden', name: 'sidx'}).val(postData['sidx'])
+                       );
+                   }
+                   if('sord' in postData) {
+                       printForm.append(
+                          $('<input />').attr({type: 'hidden', name: 'sord'}).val(postData['sord'])
+                       );
+                   }
+                   printForm.append(
+                      $('<input />').attr({type: 'hidden', name: 'moduleName'}).val('workspace'),
+                      $('<input />').attr({type: 'hidden', name: 'controllerName'}).val('real-estate-proposals'),
+                      $('<input />').attr({type: 'hidden', name: 'actionName'}).val('print')
+                   );
+                   printForm.hide().appendTo($('body')).submit();
+               }
+            };
+            <?php } ?>
+            self.createToolbar(buttons);
+
+            var buttons = new Object(),
+                filter = $('body > .ui-layout-center #tab-block-2 form:eq(0)'),
+                tabHolder = $('div.#tab-holder');
+            buttons[<?php echo Zend_Json::encode($this->translate('FilterCommand')); ?>] = {
+               id: 'action-filter',
+               icon: '/img/icons/24x24/grid-filter.png',
+               action: function() {
+                   filter.jqGridFilter('submit');
+                   tabHolder.tabs("select", 0);
+               }
+            };
+            buttons[<?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>] = {
+               id: 'action-reset',
+               icon: '/img/icons/24x24/reset-filter.png',
+               action: function() {
+                   filter.resetForm();
+                   filter.jqGridFilter('reset');
+               }
+            };
+            self.createToolbar(buttons);
+
+            var buttons = new Object();
+            buttons[<?php echo Zend_Json::encode($this->translate('EditGridColumnModel')); ?>] = {
+                id: 'action-edit-coloptions',
+                icon: '/img/icons/24x24/preferences.png',
+                iconSize: 24,
+                showtext: false,
+                action: function() {
+                    $('<div />').iwindow({
+                        title: <?php echo Zend_Json::encode($this->translate('UserColumnsModelSettings')); ?>,
+                        url: '/administration/column-models/user/colModelId/<?php echo $this->colModelId; ?>/__command__/<?php echo md5('edit' . Zend_Session::getId()); ?>',
+                        maximized: true,
+                        bubble: true
+                    });
+                }
+            };
+            self.createToolbar(buttons);
+
+            var buttons = new Object();
+            buttons[<?php echo Zend_Json::encode($this->translate('RefreshCommand')); ?>] = {
+                id: 'action-grid-refresh',
+                icon: '/img/icons/24x24/table_refresh.gif',
+                iconSize: 24,
+                showtext: false,
+                action: function() {
+                    //@TODO: проверку на наличие тулбара в условии сделать с использованием стандартных средств
+                    if('clearToolbar' in grid[0] && $.isFunction(grid[0].clearToolbar)){
+                       grid[0].clearToolbar();
+                    } else {
+                       grid.trigger("reloadGrid");
+                    }
+                }
+            };
+            self.createToolbar(buttons);
+        },
+        getFullRowTitle: function(rowId) {
+            var data = $("#list").getRowData(rowId);
+            var title = <?php echo Zend_Json::encode($this->translate('RealEstateProposal')); ?>;
+            if (data.Title) {
+                title += (' "' + data.Title.replace(/<[^>]*>/g, "") + '"');
+            }
+            return title;
+        },
+        beforePageLayout: function(){
+            var self = this,
+                grid = $('#main-grid');
+            if(grid.size()){
+                grid.setGridParam({
+                    gridComplete: function() {
+                       self.setActionsToolbarButtonsState();
+                       self.setGridToolbarButtonsState();
+                       $('#action-filter, #action-reset, #action-print').button('enable');
+                    },
+                    onSelectRow: function() {
+                        var grid = $('#main-grid');
+                        var selectedRowId = grid.getGridParam('selrow');
+                        if ($('#' + selectedRowId, grid).hasClass('ui-state-highlight')) {
+                            var unSelecting = $('.jqgrow.ui-state-highlight', grid).not('#' + selectedRowId);
+                            for(var i=0; i<unSelecting.length; i++){
+                                grid.setSelection(unSelecting.eq(i).attr('id'), false);
+                            }
+                        }
+                        self.setActionsToolbarButtonsState();
+                        self.setGridToolbarButtonsState();
+                    },
+                    loadBeforeSend: function() {
+                        $('#page-toolbar .ui-button').button('disable');
+                    }
+                });
+            }
+
+             $('#fieldset-proposal, #fieldset-realestateobject, #fieldset-contract').each(function(){
+                var $fieldset = $(this),
+                    $noteParent = $fieldset.find('#note').parents('div.form-element:eq(0)');
+                    $wrapperLeft = $fieldset.find('div.form-elements').addClass('form-elements-left'),
+                    $wrapperRight = $('<div />').addClass('form-elements form-elements-right'),
+                    $columnsWrapper = $('<div />').addClass('columns-wrapper')
+                $columnsWrapper.append($wrapperLeft, $wrapperRight);
+                $fieldset.append($columnsWrapper)
+                         .find('div.form-element:odd').appendTo($wrapperRight);
+                $wrapperLeft.width($columnsWrapper/2);
+                $wrapperRight.width($columnsWrapper/2);
+                if($noteParent.size()){
+                    $columnsWrapper.prepend(
+                       $('<div />').addClass('form-elements').append(
+                           $noteParent.css('margin-bottom', '3px')
+                       ),
+                       $('<div />').css("clear", "both")
+                    );
+                }
+            });
+
+            var filter = $('body > .ui-layout-center .ui-jqgrid-filter:eq(0)');
+            if(filter.size()) {
+                filter.removeClass('ui-jqgrid-filter');
+            }
+        },
+        setActionsToolbarButtonsState: function() {
+            var grid = $('#main-grid');
+            var treeGrid = grid.getGridParam('treeGrid');
+            $('#action-create').button('enable');
+            if(treeGrid){
+                var selecectedRow = grid.getGridParam('selrow');
+                $('#action-remove, #action-edit, #action-explore').button((null !== selecectedRow)? 'enable' : 'disable');
+            } else {
+                var selecectedRows = grid.getGridParam('selarrrow'); // In treeGrid is null
+                $('#action-remove').button(selecectedRows.length == 0 ? 'disable' : 'enable');
+                $('#action-edit, #action-explore').button(selecectedRows.length != 1 ? 'disable' : 'enable');
+            }
+        },
+        setGridToolbarButtonsState : function() {
+            var selecectedRows = $('#main-grid').getGridParam('selarrrow');
+            $('#action-grid-refresh, #action-edit-coloptions').button('enable');
+            if (selecectedRows.length === 0) {
+                $('#action-select-all').button('enable');
+                $('#action-select-none').button('disable');
+                $('#action-select-toggle').button('disable');
+            } else if (selecectedRows.length === $('#list tr.jqgrow').length) {
+                $('#action-select-all').button('disable');
+                $('#action-select-none').button('enable');
+                $('#action-select-toggle').button('disable');
+            } else {
+                $('#action-select-all').button('enable');
+                $('#action-select-none').button('enable');
+                $('#action-select-toggle').button('enable');
+            }
+        },
+        afterPageLayout: function() {
+            var self = this;
+            self.constructor.prototype.afterPageLayout.call(self);
+
+            var popupPhrases = {
+                cancel: <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>,
+                select: <?php echo Zend_Json::encode($this->translate('SelectCommand')); ?>,
+                breakConnection: <?php echo Zend_Json::encode($this->translate('BreakConnectionCommand')); ?>,
+                alert: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                noSelection: <?php echo Zend_Json::encode($this->translate('NoObjectSelectedLinkingConfirm!HTML!')); ?>,
+                ok: <?php echo Zend_Json::encode($this->translate('Ok')); ?>
+            };
+            $('#realEstateTypeFilter').width(180).linkableField({
+                visibleParam: ['Title'],
+                basicUrl: '/directories/real-estate-types/main',
+                idHolder: '#realEstateTypeIdFilter',
+                popupPhrases: popupPhrases
+            });
+            $('#districtTitleFilter').width(180).linkableField({
+                visibleParam: ['Title'],
+                basicUrl: '/directories/geographical-districts/main',
+                idHolder: '#districtIdFilter',
+                popupPhrases: popupPhrases
+            });
+            $('#streetTitleFilter').width(180).linkableField({
+                visibleParam: ['Title'],
+                basicUrl: '/directories/streets/main',
+                idHolder: '#streetIdFilter',
+                popupPhrases: popupPhrases
+            });
+            $('#realtorNameFilter').width(180).linkableField({
+                visibleParam: ['LastName', 'FirstName', 'SecondName'],
+                basicUrl: '/administration/users',
+                idHolder: '#realtorIdFilter',
+                popupPhrases: popupPhrases
+            });
+            $('#planningTypeFilter').width(180).linkableField({
+                visibleParam: ['Title'],
+                basicUrl: '/directories/planning-types/main',
+                idHolder: '#planningTypeIdFilter',
+                popupPhrases: popupPhrases
+            });
+            $('#proposalStatusFilter').width(180).linkableField({
+                visibleParam: ['Title'],
+                basicUrl: '/directories/proposal-statuses/main',
+                idHolder: '#proposalStatusIdFilter',
+                popupPhrases: popupPhrases
+            });
+            $('#purposeTitleFilter').width(180).linkableField({
+                visibleParam: ['Title'],
+                basicUrl: '/directories/real-estate-purposes/main',
+                idHolder: '#purposeIdFilter',
+                popupPhrases: popupPhrases
+            });
+            $('#heatingTypeFilter').width(180).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/heating-types/main',
+                   idHolder: '#heatingTypeIdFilter',
+                   popupPhrases: popupPhrases
+            });
+            $('#hotWaterSupplyFilter').width(180).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/hot-water-supplies/main',
+                   idHolder: '#hotWaterSupplyIdFilter',
+                   popupPhrases: popupPhrases
+            });
+
+        },
+        onResize: function() {
+            var gridHolder = $('#tab-block-1');
+            if(gridHolder.size() && gridHolder.width()) {
+                var dockAreaHeight = $('#application-dockarea').height(),
+                    tabBlockHeight = $('#tab-title').height(),
+                    avHeight = (dockAreaHeight - tabBlockHeight - 35);
+                gridHolder.css('overflow', 'hidden').height(avHeight);
+                $('#main-grid').setGridHeight(gridHolder.height() - ($('div.ui-jqgrid').height() - $('div.ui-jqgrid-bdiv').height()))
+                               .setGridWidth(gridHolder.width(), false);
+            }
+        }
+    });
+</script>

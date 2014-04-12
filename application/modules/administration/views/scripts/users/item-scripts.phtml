@@ -1,0 +1,331 @@
+<link href="/css/blanks/account.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="javascript" src="/js/jquery.addressdialog.js"></script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function(){
+        var formatCheck   = function(cellvalue, options, rowObject) {
+                var rowId  = options.rowId,
+                    gridId = options.colModel.formatoptions.subject;
+
+                return '<input type="checkbox" ' +
+                              'name="' + gridId + '[' + rowId + ']' + '" ' +
+                              'value="' + cellvalue + '" ' +
+                              (cellvalue ? 'checked="checked" ' : '') +
+                              'style="display:none;"' +
+                              '/> ' +
+                        (cellvalue ? '<img src="/img/icons/16x16/tick.gif" />' : '');
+            },
+            unformatCheck = function(cellvalue, options, cellObject) {
+                if (cellvalue)
+                    return cellObject.find('input:checkbox').get(0).checked ? 1 : 0;
+                else
+                    return null;
+            };
+        var defaultGridParams = {
+                width: 600,
+                height: 200,
+                url: "",
+                datatype: "json",
+                treedatatype: "json",
+                mtype:"GET",
+                colNames: [
+                                'id',
+                                '',
+                                <?php echo Zend_Json::encode($this->translate('Title')); ?>
+                          ],
+                colModel: [
+                          ],
+                pager: false,
+                caption: false,
+                treeGrid: true,
+                treeGridModel: "adjacency",
+                ExpandColumn: "title",
+                onSelectRow: function(rowid) {
+                    var currentVal = $(this).getRowData(rowid).check;
+                    if (currentVal != 0 || currentVal != 1) {
+                        currentVal = unformatCheck(currentVal, {}, $('<div />').html(currentVal));
+                    }
+
+                    currentVal = currentVal ? 0 : 1;
+                    $(this).setCell(rowid, 'check', currentVal);
+
+                    var selectParent     = function(record) {
+                            var parent = $(this).getNodeParent(record);
+                            if (parent) {
+                                $(this).setCell(parent.id, 'check', 1);
+                                selectParent.call(this, parent);
+                            }
+                        },
+                        deselectChildren = function(record) {
+                            var children = $(this).getNodeChildren(record)
+                            for (var i = 0, j = children.length; i < j; i++) {
+                                $(this).setCell(children[i].id, 'check', 0);
+                                deselectChildren.call(this, children[i]);
+                            }
+                        };
+                    if (currentVal) {
+                        selectParent.call(this, $(this).getInd(rowid, true));
+                    } else {
+                        deselectChildren.call(this, $(this).getInd(rowid, true));
+                    }
+
+                    $(this).resetSelection();
+                }
+            };
+
+        {
+            //add departments grid
+            var wrapper  = $('<div />')
+                                .addClass('fieldset-wrapper'),
+                fieldset = $('<fieldset />')
+                                .attr('id', 'fieldset-department')
+                                .addClass('fieldset-visible')
+                                .appendTo(wrapper);
+            $('<legend />').text(<?php echo Zend_Json::encode($this->translate('DepartmentSection')); ?>).appendTo(fieldset);
+            $('<table />').attr('id', 'department').appendTo(fieldset);
+
+            wrapper.insertAfter($('#fieldset-otheroffice').parent());
+
+            $("#department").jqGrid($.extend({}, defaultGridParams, {
+                grid: $("#department"),
+                url: "/administration/users/departments/show/all<?php echo $this->id ? ('/id/' . $this->id) : ''; ?>",
+                colModel: [
+                    {name:'id',index:'id',width:1,hidden:true,key:true},
+                    {name:'check',index:'check',width:30,align:'center',sortable:false,formatoptions:{subject:'department'},formatter:formatCheck,unformat:unformatCheck},
+                    {name:'title',index:'title',width:570,sortable:false},
+                ]
+            }));
+        }
+        {
+            //add specializations grid
+            var wrapper  = $('<div />')
+                                .addClass('fieldset-wrapper'),
+                fieldset = $('<fieldset />')
+                                .attr('id', 'fieldset-specialization')
+                                .addClass('fieldset-visible')
+                                .appendTo(wrapper);
+            $('<legend />').text(<?php echo Zend_Json::encode($this->translate('Credentials')); ?>).appendTo(fieldset);
+            $('<table />').attr('id', 'specialization').appendTo(fieldset);
+
+            wrapper.insertAfter($('#fieldset-department').parent());
+
+            $("#specialization").jqGrid($.extend({}, defaultGridParams, {
+                grid: $("#specialization"),
+                url: "/administration/users/specializations/show/all<?php echo $this->id ? ('/id/' . $this->id) : ''; ?>",
+                colModel: [
+                    {name:'id',index:'id',width:1,hidden:true,key:true},
+                    {name:'check',index:'check',width:30,align:'center',sortable:false,formatoptions:{subject:'specialization'},formatter:formatCheck,unformat:unformatCheck},
+                    {name:'title',index:'title',width:570,sortable:false},
+                ]
+            }));
+        }
+
+        {
+            //add roles grid
+            var wrapper  = $('<div />')
+                                .addClass('fieldset-wrapper'),
+                fieldset = $('<fieldset />')
+                                .attr('id', 'fieldset-role')
+                                .addClass('fieldset-visible')
+                                .appendTo(wrapper);
+            $('<legend />').text(<?php echo Zend_Json::encode($this->translate('Roles')); ?>).appendTo(fieldset),
+            $('<table />').attr('id', 'role').appendTo(fieldset);
+            $('<div />').html(<?php echo Zend_Json::encode($this->translate('UserRoleCalculationExplanation!HTML!')); ?>).appendTo(fieldset);
+
+            wrapper.insertAfter($('#fieldset-profile').parent());
+
+            $("#role").jqGrid({
+                datatype: 'json',
+                url: "/administration/roles/list/for-user/<?php echo $this->id ? $this->id : 'undefinid'; ?>",
+                colNames: [
+                    <?php echo Zend_Json::encode($this->translate('Title')); ?>,
+                    'DepartmentId',
+                    <?php echo Zend_Json::encode($this->translate('Department')); ?>,
+                    'SpecializationId',
+                    <?php echo Zend_Json::encode($this->translate('Specialization')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('Notice')); ?>
+                ],
+                colModel: [
+                    {name:'Title',index:'Title',width:300,resizable:false,sortable:false},
+                    {name:'DepartmentId',index:'DepartmentId',hidden:true},
+                    {name:'Department',index:'Department',width:300,resizable:false,sortable:false},
+                    {name:'SpecializationId',index:'SpecializationId',hidden:true},
+                    {name:'Specialization',index:'Specialization',width:300,resizable:false,sortable:false},
+                    {name:'Notice',index:'Notice',hidden:true}
+                ],
+                imgpath: '/img/jqGrid',
+                caption: false,
+                multiselect: false,
+                viewrecords: false,
+                pager: false,
+                width: 600,
+                shrinkToFit: false,
+                onSelectRow: function() {
+                    $(this).resetSelection();
+                },
+                afterInsertRow: function(rowid, rowdata) {
+                    var grid = $(this);
+                    if (typeof rowid == 'object') {
+                        rowid = rowdata;
+                        rowdata = grid.getRowData(rowid);
+                    }
+
+                    var row = grid.find('#' + rowid);
+                    row.find('td:eq(0)').each(function() {
+                        $(this).wrapInner('<a />').find('a').attr('href', '/administration/roles/item/id/' + rowid).click(function() {
+                            $('<div />').iwindow({
+                                title: <?php echo Zend_Json::encode($this->translate('Role')); ?> +
+                                       ' "' + rowdata.Title + '"',
+                                url: $(this).attr('href'),
+                                maximized: true,
+                                bubble: true
+                            });
+                            return false;
+                        });
+                    });
+                    row.find('td:eq(2)').each(function() {
+                        $(this).wrapInner('<a />').find('a').attr('href', '/administration/departments/item/id/' + rowdata.DepartmentId).click(function() {
+                            $('<div />').iwindow({
+                                title: <?php echo Zend_Json::encode($this->translate('Department')); ?> +
+                                       ' "' + rowdata.Department + '"',
+                                url: $(this).attr('href'),
+                                maximized: true,
+                                bubble: true
+                            });
+                            return false;
+                        });
+                    });
+                    row.find('td:eq(4)').each(function() {
+                        $(this).wrapInner('<a />').find('a').attr('href', '/administration/specializations/item/id/' + rowdata.SpecializationId).click(function() {
+                            $('<div />').iwindow({
+                                title: <?php echo Zend_Json::encode($this->translate('Specialization')); ?> +
+                                       ' "' + rowdata.Specialization + '"',
+                                url: $(this).attr('href'),
+                                maximized: true,
+                                bubble: true
+                            });
+                            return false;
+                        });
+                    });
+                }
+            });
+        }
+    });
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+
+            $('fieldset').collapsibleFieldset().filter('#fieldset-notice').find('> legend').click();
+
+            self.groupFieldsetsByTabs();
+
+            var checkbox = $('#changePassword');
+            if (checkbox.size()) {
+                var pwsdWrapper = $('#password').parent().parent();
+                if (!checkbox.attr('checked')) {
+                    pwsdWrapper.hide();
+                }
+                checkbox.click(function() {
+                    if (checkbox.is(':checked')) {
+                        pwsdWrapper.is(':hidden') && pwsdWrapper.show();
+                    } else {
+                        pwsdWrapper.is(':visible') && pwsdWrapper.hide();
+                    }
+                });
+            }
+            self.createToolbar({
+                <?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>: {
+                    id: 'action-save',
+                    icon: '/img/icons/24x24/save.gif',
+                    action: function() {
+                        $('body').prepend(
+                            $('<div />')
+                                .addClass('ui-dialog-loader')
+                                .css({zIndex: 100})
+                        );
+                        $('#blank-account')
+                            .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                            .submit();
+                    }
+                },
+                <?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>: {
+                    id: 'action-reset',
+                    icon: '/img/icons/24x24/reset.gif',
+                    action: function() {
+                        $('body').prepend(
+                            $('<div />')
+                                .addClass('ui-dialog-loader')
+                                .css({zIndex: 100})
+                        );
+                        window.location.reload();
+                    }
+                }
+            });
+            $('#address').attachAddressDialog({
+                controlledFields: {
+                    'postalIndex': $('#addressPostalIndex'),
+                    'country': $('#addressCountry'),
+                    'territory': $('#addressTerritory'),
+                    'streetType': $('#addressStreetType'),
+                    'street': $('#addressStreet'),
+                    'building': $('#addressBuilding'),
+                    'room': $('#addressRoom')
+                },
+                handlers: {
+                    fieldsToDialogFormatter: function(values) {
+                        if (!values.country)
+                            values.country = '804';
+                        if (!values.territory)
+                            values.territory = '8000000000';
+                        return values;
+                    }
+                },
+                url: '/directories/addresses-manager',
+                phrases: {
+                    'clear': <?php echo Zend_Json::encode($this->translate('ClearCommand')); ?>,
+                    'edit':  <?php echo Zend_Json::encode($this->translate('EditCommand')); ?>,
+                    'apply': <?php echo Zend_Json::encode($this->translate('ApplyCommand')); ?>,
+                    'close': <?php echo Zend_Json::encode($this->translate('CloseCommand')); ?>,
+                    'postalIndex': <?php echo Zend_Json::encode($this->translate('PostalIndex')); ?>,
+                    'country': <?php echo Zend_Json::encode($this->translate('Country')); ?>,
+                    'territory': <?php echo Zend_Json::encode($this->translate('UaTerritory')); ?>,
+                    'street': <?php echo Zend_Json::encode($this->translate('Street')); ?>,
+                    'building': <?php echo Zend_Json::encode($this->translate('Building')); ?>,
+                    'room': <?php echo Zend_Json::encode($this->translate('Room')); ?>,
+                    'formatAddress': <?php echo Zend_Json::encode($this->translate('FormatAddressCommand')); ?>,
+                    'autoFormatAddress': <?php echo Zend_Json::encode($this->translate('AutoFormatAddressCommand')); ?>
+                }
+            });
+        },
+        groupFieldsetsByTabs: function() {
+            var blank       = $('#blank-account'),
+                fieldsets   = blank.find('.fieldset-wrapper'),
+                block1      = $('<div />').attr('id', 'blank-block-1')
+                                          .append(fieldsets.get(0), fieldsets.get(1), fieldsets.get(2)),
+                block2      = $('<div />').attr('id', 'blank-block-2')
+                                          .append(fieldsets.get(3)),
+                block3      = $('<div />').attr('id', 'blank-block-3')
+                                          .append(fieldsets.get(4), fieldsets.get(5), fieldsets.get(6)),
+                block4      = $('<div />').attr('id', 'blank-block-4')
+                                          .append(fieldsets.get(7), fieldsets.get(8), fieldsets.get(9)),
+                tabTitle    = $('<ul />').append(
+                                $('<li />').append($('<a />')
+                                           .attr('href', '#blank-block-1')
+                                           .text(<?php echo Zend_Json::encode($this->translate('SystemRegistrationData')); ?>)),
+                                $('<li />').append($('<a />')
+                                           .attr('href', '#blank-block-2')
+                                           .text(<?php echo Zend_Json::encode($this->translate('ContactData')); ?>)),
+                                $('<li />').append($('<a />')
+                                           .attr('href', '#blank-block-3')
+                                           .text(<?php echo Zend_Json::encode($this->translate('PersonalData')); ?>)),
+                                $('<li />').append($('<a />')
+                                           .attr('href', '#blank-block-4')
+                                           .text(<?php echo Zend_Json::encode($this->translate('OfficeData')); ?>))
+                              ),
+                tabHolder   = $('<div />').append(tabTitle,
+                                                    block1,block2,block3,block4);
+            tabHolder.prependTo(blank).tabs({selected: 0, height: 'auto'});
+            $('#fieldset-contacts').removeClass('fieldset-visible').find('legend').hide();
+        }
+    });
+</script>

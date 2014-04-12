@@ -1,2 +1,4 @@
 .idea/
 database/renta.fdb
+datatmp/sessions/*
+public/uploads/*

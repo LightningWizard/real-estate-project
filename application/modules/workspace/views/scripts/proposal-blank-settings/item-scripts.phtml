@@ -1,0 +1,125 @@
+<link href="/css/blanks/proposal-blank-settings.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildSpecialLayout();
+            self.buildToolbars();
+            self.decorateElements();
+
+        },
+        buildSpecialLayout: function() {
+            var self = this;
+            $('<div />').addClass('fieldset-wrapper')
+                   .append(
+                        $('<fieldset />').addClass('fieldset-visible').append(
+                            $('<legend />').text(<?php echo Zend_Json::encode($this->translate('ProposalBlankFieldsForDisplay'))?>),
+                            $('<div />').addClass('grid-holder').append(
+                                $('<table />').attr({'id' : 'settings-grid'}).addClass('scroll'),
+                                $('<div />').attr({'id' : 'settings-grid-pager'}).addClass('scroll')
+                            )
+                        )
+                   )
+                   .prependTo($('#fieldset-notice').parent());
+            self._buildSettingsGrid();
+            $('fieldset').collapsibleFieldset().filter('#fieldset-notice').find('> legend').click();
+        },
+        buildToolbars: function() {
+            var self = this,
+                buttons = new Object();
+            <?php if ($this->blankEditable) { ?>
+             buttons[<?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>] = {
+                id: 'action-save',
+                icon: '/img/icons/24x24/save.gif',
+                action: function() {
+                    $('body').prepend(
+                        $('<div />')
+                            .addClass('ui-dialog-loader')
+                            .css({zIndex: 100})
+                    );
+                    $('#proposal-blank-settings')
+                        .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                        .submit();
+                }
+             };
+             buttons[<?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>] ={
+                id: 'action-reset',
+                icon: '/img/icons/24x24/reset.gif',
+                action: function() {
+                    window.location.reload();
+                }
+             };
+             self.createToolbar(buttons);
+            <?php } else { ?>
+                //no available toolbars
+            <?php } ?>
+        },
+        decorateElements: function() {
+            <?php if($this->blankEditable) { ?>
+            var popupPhrases = {
+                cancel: <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>,
+                select: <?php echo Zend_Json::encode($this->translate('SelectCommand')); ?>,
+                breakConnection: <?php echo Zend_Json::encode($this->translate('BreakConnectionCommand')); ?>,
+                alert: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                noSelection: <?php echo Zend_Json::encode($this->translate('NoObjectSelectedLinkingConfirm!HTML!')); ?>,
+                ok: <?php echo Zend_Json::encode($this->translate('Ok')); ?>
+            },
+            $realEstateType = $('#realEstateType');
+            $realEstateType.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/real-estate-types/main',
+                   idHolder: '#realEstateTypeId',
+                   popupPhrases: popupPhrases
+            });
+            <?php } else {?>
+                  $(':input').datepicker('disable');
+            <?php } ?>
+        },
+        _buildSettingsGrid: function() {
+            var grid = $('#settings-grid'),
+                pager = $('#settings-grid-pager');
+            grid.jqGrid({
+                colNames: [
+                    'id',
+                    <?php echo Zend_Json::encode($this->translate('FieldName')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('FieldIsVisible')); ?>
+                ],
+                colModel: [
+                    {name: 'id', index: 'id', key: true, hidden: true},
+                    {name: 'FieldName', index: 'FieldName', width: 400, sortable: false},
+                    {name: 'FieldIsVisible', index: 'FieldIsVisible', width: 120, sortable: false},
+                ],
+                pager: '#settings-grid-pager',
+                datatype: 'local',
+                data: <?php echo Zend_Json::encode($this->fieldsSettings); ?>,
+                viewrecords: true,
+                width: 800,
+                height: 750,
+                pgbuttons: false,
+                pginput: false,
+                rowNum: 1000,
+                gridComplete: function(){
+                    $('.settings-cbox').each(function(){
+                        var element = $(this).hide(),
+                            placeholder = $('<img />'),
+                            sync = function() {
+                                if(element.is(':checked')) {
+                                   placeholder.removeClass('bool-true').addClass('bool-false').attr({'src': '/img/icons/16x16/cross.gif'}); 
+                                } else {
+                                   placeholder.removeClass('bool-false').addClass('bool-true').attr({'src': '/img/icons/16x16/tick.gif'})
+                                }
+                            };
+                        sync();
+                        placeholder.insertAfter(element);
+                        element.parent().bind('click', function(){
+                            element.get(0).checked = !element.get(0).checked;
+                            sync();
+                        });
+                        
+                    })
+                }
+            }).navGrid('#settings-grid-pager', {add: false, edit: false, del: false, search: false, refresh: true});
+        }
+    });
+</script>

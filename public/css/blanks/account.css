@@ -1,0 +1,18 @@
+#blank-account fieldset { width:600px; margin:10px auto 0 auto; }
+#blank-account .form-element-label {width:120px; }
+#blank-account .form-element-item {width:465px;}
+#blank-account .input-text,
+#blank-account .input-select{ width:460px; }
+#blank-account .hasDatepicker{width:440px;}
+
+#blank-account #address{height:4.8em;}
+
+#blank-account #blank-block-4 .form-element-label {width:200px; }
+#blank-account #blank-block-4 .form-element-item {width:385px;}
+#blank-account #blank-block-4 .input-text,
+#blank-account #blank-block-4 .input-select{ width:380px; }
+#blank-account #blank-block-4 .hasDatepicker{width:360px;}
+
+#blank-account #fieldset-notice{width:auto}
+#blank-account #fieldset-notice .form-elements {float:none;}
+#blank-account #fieldset-notice #note {width:100%;height:4.8em;}

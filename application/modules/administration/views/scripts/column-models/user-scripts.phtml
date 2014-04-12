@@ -1,0 +1,118 @@
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildSpecialLayout();
+            self.buildToolbars();
+        },
+        buildSpecialLayout: function() {
+            var self = this,
+                grid = $('#list'),
+                pager = $('#pager');
+
+            grid.jqGrid({
+                datatype: 'local',
+                colNames: [
+                    'id',
+                    'ColumnId',
+                    'ColumnName',
+                    <?php echo Zend_Json::encode($this->translate('ColumnAlias')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnWidth')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnIsVisible')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnIsPrintable')); ?>,
+                ],
+                colModel: [
+                    {name: 'id', index: 'id', hidden: true, key: true},
+                    {name: 'ColumnId', index: 'ColumnId', hidden: true},
+                    {name: 'ColumnName', index: 'ColumnName', hidden: true},
+                    {name: 'ColumnAlias', index: 'ColumnAlias', sortable: false, width: 350, editable: true, editoptions : {readonly: 'readonly'}},
+                    {name: 'ColumnWidth', index: 'ColumnWidth', sortable: false, width: 150, editable: true, editrules: {integer: true}},
+                    {name: 'ColumnIsVisible', index: 'ColumnIsVisible', sortable: false, width: 150, formatter: 'checkbox', editable: true,edittype: 'checkbox', editoptions: {value:"1:0"}},
+                    {name: 'ColumnIsPrintable', index: 'ColumnIsPrintable', sortable: false, width: 150, formatter: 'checkbox', editable: true,edittype: 'checkbox', editoptions: {value:"1:0"}}
+                ],
+                data: <?php echo Zend_Json::encode($this->columnsSettings); ?>,
+                dataProxy: function (ajaxOptions, oper_grid){
+                    if($.isFunction(ajaxOptions.complete)){
+                        ajaxOptions.complete(ajaxOptions.data, 'success');
+                    }
+                },
+                pager: pager,
+                multiselect: false,
+                rowNum: 1000,
+                height: 400
+            }).navGrid(
+              '#pager',
+              {add: false, edit: true, del: false, search: false, refresh: true},
+              {useDataProxy: true, closeAfterEdit: true, reloadAfterSubmit: false}
+            );
+            grid.jqGrid('sortableRows', {});
+            $('fieldset').collapsibleFieldset().filter('#fieldset-notice').find('> legend').click();
+        },
+        buildToolbars: function() {
+            var self = this,
+                buttons = new Object();
+             buttons[<?php echo Zend_Json::encode($this->translate('EditCommand')); ?>] = {
+                 id: 'action-edit',
+                 icon: '/img/icons/24x24/edit.gif',
+                 action: function() {
+                     $('#edit_list').trigger('click');
+                 }
+             },
+             buttons[<?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>] = {
+                id: 'action-save',
+                icon: '/img/icons/24x24/save.gif',
+                action: function() {
+                    var form = $('<form />').attr('method', 'post').hide(),
+                        grid = $('#list'),
+                        gridDataContainer = $('<div />'),
+                        dataIDs = grid.getDataIDs();
+                    $('body').append(form);
+                    for(var i = 0, j = dataIDs.length; i < j; i++) {
+                        var rowData = grid.getRowData(dataIDs[i]);
+                        gridDataContainer.append(
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnAlias]" value="' + rowData.ColumnAlias + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][settingId]" value="' + dataIDs[i] + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnId]" value="' + rowData.ColumnId + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnWidth]" value="' + rowData.ColumnWidth + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnIsVisible]" value="' + rowData.ColumnIsVisible + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnIsPrintable]" value="' + rowData.ColumnIsPrintable + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnOrder]" value="' + i+ '"/>'
+                        );
+                    }
+                    form.append(gridDataContainer)
+                        .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                        .submit();
+                }
+             };
+             self.createToolbar(buttons);
+             $('#action-edit').button('disable');
+        },
+        setActionsToolbarButtonsState: function() {
+            var grid = $('#list');
+            $('#action-create').button('enable');
+            var selectedRow = grid.getGridParam('selrow');
+            $('#action-remove').button(!selectedRow ? 'disable' : 'enable');
+            $('#action-edit, #action-explore').button(!selectedRow ? 'disable' : 'enable');
+        },
+        setGridToolbarButtonsState: function() {
+            $('#action-grid-refresh').button('enable');
+        },
+        beforePageLayout: function() {
+            var self = this,
+                grid = $('#list');
+            if(grid.size()){
+                grid.setGridParam({
+                    onSelectRow: function() {
+                        self.setActionsToolbarButtonsState();
+                        self.setGridToolbarButtonsState();
+                    },
+                    gridComplete: function() {
+                        self.setActionsToolbarButtonsState();
+                        self.setGridToolbarButtonsState();
+                    }
+                });
+            }
+        }
+    });
+</script>

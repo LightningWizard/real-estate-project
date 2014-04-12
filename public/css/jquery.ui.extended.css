@@ -1,0 +1,844 @@
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                      Layoput decoration                                             *
+ *                                                                                                     *
+ *******************************************************************************************************/
+.ui-layout-pane {
+    border-color: #4297d7;
+    padding: 0px;
+}
+.ui-layout-pane.ui-layout-pane-nopadding {
+    padding: 0px;
+}
+
+.ui-layout-pane-header, .ui-layout-pane-footer {
+
+}
+.ui-layout-pane-header {
+    margin-bottom: 0px;
+}
+.ui-layout-pane-footer {
+    margin-top: 0px;
+}
+.ui-layout-pane-open {
+
+}
+.ui-layout-pane-closed {
+
+}
+.ui-layout-pane-center {
+    overflow:auto;
+    background-color: white;
+}
+.ui-layout-pane-north {
+
+}
+.ui-layout-pane-north-open {
+
+}
+.ui-layout-pane-north-closed {
+
+}
+.ui-layout-pane-south {
+
+}
+.ui-layout-pane-south-open {
+
+}
+.ui-layout-pane-south-closed {
+
+}
+.ui-layout-pane-north .ui-layout-pane-content, .ui-layout-pane-south .ui-layout-pane-content {
+    overflow: hidden !important;
+}
+.ui-layout-pane-west {
+
+}
+.ui-layout-pane-west-open {
+
+}
+.ui-layout-pane-west-closed {
+
+}
+.ui-layout-pane-east {
+
+}
+.ui-layout-pane-east-open {
+
+}
+.ui-layout-pane-east-closed {
+
+}
+.ui-layout-pane-west .ui-layout-pane-content, .ui-layout-pane-east .ui-layout-pane-content {
+    overflow: hidden !important;
+}
+
+.ui-layout-resizer {
+    background-color:#d9e3e8;
+}
+.ui-layout-resizer-open {
+
+}
+.ui-layout-resizer-closed {
+
+}
+.ui-layout-resizer-north {
+
+}
+.ui-layout-resizer-north-open {
+
+}
+.ui-layout-resizer-north-closed {
+
+}
+.ui-layout-resizer-south {
+
+}
+.ui-layout-resizer-south-open {
+
+}
+.ui-layout-resizer-south-closed {
+
+}
+.ui-layout-resizer-west {
+
+}
+.ui-layout-resizer-west-open {
+
+}
+.ui-layout-resizer-west-closed {
+
+}
+.ui-layout-resizer-east {
+
+}
+.ui-layout-resizer-east-open {
+
+}
+.ui-layout-resizer-east-closed {
+
+}
+
+.ui-layout-resizer-sliding {
+
+}
+.ui-layout-resizer-north-sliding {
+
+}
+.ui-layout-resizer-south-sliding {
+
+}
+.ui-layout-resizer-west-sliding {
+
+}
+.ui-layout-resizer-east-sliding {
+
+}
+
+.ui-layout-resizer-drag {
+
+}
+.ui-draggable-dragging {
+
+}
+.ui-layout-resizer-draging {
+
+}
+.ui-layout-resizer-north-drag {
+
+}
+.ui-layout-resizer-north-draging {
+
+}
+.ui-layout-resizer-south-drag {
+
+}
+.ui-layout-resizer-south-draging {
+
+}
+.ui-layout-resizer-west-drag {
+
+}
+.ui-layout-resizer-west-draging {
+
+}
+.ui-layout-resizer-east-drag {
+
+}
+.ui-layout-resizer-east-draging {
+
+}
+
+.ui-layout-toggler {
+
+}
+.ui-layout-toggler-open {
+
+}
+.ui-layout-toggler-closed {
+
+}
+.ui-layout-toggler-north {
+
+}
+.ui-layout-toggler-north-open {
+    background: transparent url(/img/layout/toggle-up.gif) no-repeat center;
+}
+.ui-layout-toggler-north-closed {
+    background: transparent url(/img/layout/toggle-dn.gif) no-repeat center;
+}
+.ui-layout-toggler-south {
+
+}
+.ui-layout-toggler-south-open {
+    background: transparent url(/img/layout/toggle-dn.gif) no-repeat center;
+}
+.ui-layout-toggler-south-closed {
+    background: transparent url(/img/layout/toggle-up.gif) no-repeat center;
+
+}
+.ui-layout-toggler-west {
+
+}
+.ui-layout-toggler-west-open {
+    background: transparent url(/img/layout/toggle-lt.gif) no-repeat center;
+}
+.ui-layout-toggler-west-closed {
+    background: transparent url(/img/layout/toggle-rt.gif) no-repeat center;
+}
+.ui-layout-toggler-east {
+
+}
+.ui-layout-toggler-east-open {
+    background: transparent url(/img/layout/toggle-rt.gif) no-repeat center ;
+}
+.ui-layout-toggler-east-closed {
+    background: transparent url(/img/layout/toggle-lt.gif) no-repeat center;
+}
+
+.ui-layout-button .ui-icon {
+    background-image:url(/img/ui/ui-icons_ef9b0a_256x240.png);
+}
+.ui-icon { width: 16px; height: 16px; background-image: url(/img/ui/ui-icons_217bc0_256x240.png); }
+.ui-widget-content{background-color:#ffffff;}
+.ui-widget-content .ui-icon {background-image: url(/img/ui/ui-icons_ef9b0a_256x240.png); }
+.ui-widget-header .ui-icon {background-image: url(/img/ui/ui-icons_ef9b0a_256x240.png); }
+.ui-state-default .ui-icon { background-image: url(/img/ui/ui-icons_217bc0_256x240.png); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(/img/ui/ui-icons_f9bd01_256x240.png); }
+.ui-state-active .ui-icon {background-image: url(/img/ui/ui-icons_ef9b0a_256x240.png); }
+.ui-state-highlight .ui-icon {background-image: url(/img/ui/ui-icons_f9bd01_256x240.png); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(/img/ui/ui-icons_cd0a0a_256x240.png); }
+
+.ui-layout-button-toggle {
+
+}
+.ui-layout-button-toggle-north {
+
+}
+.ui-layout-button-toggle-south {
+
+}
+.ui-layout-button-toggle-west {
+
+}
+.ui-layout-button-toggle-east {
+
+}
+
+.ui-layout-button-close {
+
+}
+.ui-layout-button-close-north {
+
+}
+.ui-layout-button-close-south {
+
+}
+.ui-layout-button-close-west {
+
+}
+.ui-layout-button-close-east {
+
+}
+
+.ui-layout-button-open {
+
+}
+.ui-layout-button-open-north {
+
+}
+.ui-layout-button-open-south {
+
+}
+.ui-layout-button-open-west {
+
+}
+.ui-layout-button-open-east {
+
+}
+
+.ui-layout-button-pin {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    z-index: 2;
+}
+.ui-layout-button-pin-up {
+
+}
+.ui-layout-button-pin-up .ui-icon {
+    background-position: -128px -144px;
+}
+.ui-layout-button-pin-down {
+
+}
+.ui-layout-button-pin-down .ui-icon {
+    background-position: -144px -144px;
+}
+.ui-layout-button-pin-north {
+    bottom: 1px;
+    right: 1px;
+}
+.ui-layout-button-pin-north-up {
+
+}
+.ui-layout-button-pin-north-down {
+
+}
+.ui-layout-button-pin-south {
+    top: 1px;
+    right: 1px;
+}
+.ui-layout-button-pin-south-up {
+
+}
+.ui-layout-button-pin-south-down {
+
+}
+.ui-layout-button-pin-west {
+    top: 1px;
+    right: 1px;
+}
+.ui-layout-button-pin-west-up {
+
+}
+.ui-layout-button-pin-west-down {
+
+}
+.ui-layout-button-pin-east {
+    top: 1px;
+    left: 1px;
+}
+.ui-layout-button-pin-east-up {
+
+}
+.ui-layout-button-pin-east-down {
+
+}
+
+.ui-layout-pane .ui-dialog-titlebar .ui-layout-button {
+    margin: -10px 0 0;
+    padding: 1px;
+    position: absolute;
+    right: 0.3em;
+    top: 50%;
+}
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                      Window decoration                                             *
+ *                                                                                                     *
+ *******************************************************************************************************/
+.ui-dialog{padding:0px;}
+.ui-dialog .ui-dialog-content{padding:5px; background-color:white;}
+.ui-dialog .ui-dialog-titlebar-maximize { position: absolute; right: 2.2em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog .ui-dialog-titlebar-maximize span { display: block; margin: 1px; }
+.ui-dialog .ui-dialog-titlebar-maximize:hover, .ui-dialog .ui-dialog-titlebar-maximize:focus { padding: 0; }
+.ui-dialog .ui-dialog-titlebar-minimize { position: absolute; right: 4.1em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog .ui-dialog-titlebar-minimize span { display: block; margin: 1px; }
+.ui-dialog .ui-dialog-titlebar-minimize:hover, .ui-dialog .ui-dialog-titlebar-maximize:focus { padding: 0; }
+.ui-dialog .ui-dialog-titlebar-refresh { position: absolute; right: 6.0em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog .ui-dialog-titlebar-refresh span { display: block; margin: 1px; }
+.ui-dialog .ui-dialog-titlebar-refresh:hover, .ui-dialog .ui-dialog-titlebar-maximize:focus { padding: 0; }
+
+.ui-dialog-link {
+    padding: 0 5px;
+    margin: 0 1px;
+    line-height: 22px;
+    font-size: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.ui-dialog-loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 66px;
+    height: 66px;
+    margin: -33px;
+    background-image: url(/img/window/loader.gif);
+    z-index: 1000;
+}
+.ui-dialog-port {
+    border: none;
+    height: 100%;
+    width: 100%;
+}
+
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                      DockBar decoration                                             *
+ *                                                                                                     *
+ *******************************************************************************************************/
+.ui-dockbar {
+    background: transparent;
+    height: 24px;
+    border: 1px solid #4297d7;
+    position: relative;
+    padding: 2px 20px 2px 2px;
+    overflow: hidden;
+}
+.ui-dockbar-navigation {
+    position: absolute;
+    height: 14px;
+    width: 16px;
+    border: 1px solid #4297d7;
+    cursor: pointer;
+}
+.ui-dockbar-navigation .ui-icon {
+    margin-top: -1px;
+}
+.ui-dockbar-prev {
+    top: -1px;
+    right: -1px;
+}
+.ui-dockbar-next {
+    bottom: -1px;
+    right: -1px;
+}
+.ui-dockbar-content {
+    height: 24px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+.ui-dockbar-content .ui-dockbar-content-element {
+    display: block;
+    float: left;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                    Wizard panel decoration                                          *
+ *                                                                                                     *
+ *******************************************************************************************************/
+.ui-wizard-panel {
+    border: 1px solid #a6c9e2;
+    padding: 0;
+    overflow: hidden;
+}
+.ui-wizard-content {
+    overflow: auto;
+}
+.ui-wizard-load-indicator {
+    position: relative;
+    height: 66px;
+    width: 66px;
+    background-image: url(/img/wizard/loader.gif);
+    top: 50%;
+    left: 50%;
+    margin: -33px;
+}
+.ui-wizard-step {
+    list-style: none;
+    background: #ebebeb url(/img/wizard/harrow.gif) center bottom no-repeat;
+    padding: 5px 5px 30px 5px;
+    cursor: pointer;
+}
+.ui-wizard-step-disabled {
+    color: #cccccc;
+    cursor: default;
+}
+.ui-wizard-step-done {
+    background-color: #d8e7f3;
+}
+.ui-wizard-step-previouse {
+    background-image: url(/img/wizard/harrow_pc.gif);
+}
+.ui-wizard-step-current {
+    background-image: url(/img/wizard/harrow_cn.gif);
+    background-color: #87b6d9;
+    cursor: default;
+}
+.ui-wizard-step-last {
+    background-image: none;
+    padding: 5px;
+}
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                 dbselect widget decoration                                          *
+ *                                                                                                     *
+ *******************************************************************************************************/
+.ui-dbselect {
+    display: inline;
+}
+.ui-dbselect-icon {
+    margin: 0 1px;
+    border: #7f9db9 solid 1px;
+    background: transparent none no-repeat center;
+    display: inline;
+    cursor: pointer;
+}
+.ui-dbselect-icon-busy {
+    background-image: url(/img/dbselect/loader.gif);
+}
+.ui-dbselect-select {
+    background-image: url(/img/dbselect/select.gif);
+}
+.ui-dbselect-clear {
+    background-image: url(/img/dbselect/clear.gif);
+}
+.ui-dbselect-disabled .ui-dbselect-select {
+    background-image: url(/img/dbselect/select_disabled.gif);
+}
+.ui-dbselect-disabled .ui-dbselect-clear {
+    background-image: url(/img/dbselect/clear_disabled.gif);
+}
+.ui-dbselect-popup {
+    display: block;
+    position: absolute;
+    z-index: 500;
+    border: #7f9db9 solid 1px;
+    background-color: white;
+    top: 5px;
+    left: 5px;
+}
+.ui-dbselect-searchbar {
+    background: transparent url(/img/dbselect/find.gif) no-repeat 1px 50%;
+    padding: 1px 1px 1px 18px;
+    border-bottom: #7f9db9 solid 1px;
+    cursor: text;
+}
+.ui-dbselect-searchbar-field {
+    border: none;
+    background-color: transparent;
+    width: 1px;
+}
+.ui-dbselect-searchbar-nomach {
+    background-color: #ff6666;
+}
+.ui-dbselect-list {
+    padding: 0px;
+}
+.ui-dbselect-list-headers {
+    background: transparent url(/img/dbselect/header.gif) repeat-x;
+    border-bottom: #7f9db9 solid 1px;
+}
+.ui-dbselect-list-content {
+    overflow: hidden;
+}
+.ui-dbselect-list-nav {
+    background: transparent url(/img/dbselect/footer.gif) repeat-x bottom;
+    border-bottom: #7f9db9 solid 1px;
+    padding: 2px 1px;
+}
+.ui-dbselect-list-nav table {
+    width: 100%;
+}
+.ui-dbselect-list-nav-first {
+    display: block;
+    height: 1.2em;
+    background-image: url(/img/dbselect/first.gif)
+}
+.ui-dbselect-list-nav-prev {
+    display: block;
+    height: 1.2em;
+    background-image: url(/img/dbselect/prev.gif)
+}
+.ui-dbselect-list-nav-next {
+    display: block;
+    height: 1.2em;
+    background-image: url(/img/dbselect/next.gif)
+}
+.ui-dbselect-list-nav-last {
+    display: block;
+    height: 1.2em;
+    background-image: url(/img/dbselect/last.gif)
+}
+.ui-dbselect-list-nav-nofirst .ui-dbselect-list-nav-first {
+    background-image: url(/img/dbselect/off-first.gif)
+}
+.ui-dbselect-list-nav-noprev .ui-dbselect-list-nav-prev {
+    background-image: url(/img/dbselect/off-prev.gif)
+}
+.ui-dbselect-list-nav-nonext .ui-dbselect-list-nav-next {
+    background-image: url(/img/dbselect/off-next.gif)
+}
+.ui-dbselect-list-nav-nolast .ui-dbselect-list-nav-last {
+    background-image: url(/img/dbselect/off-last.gif)
+}
+
+.ui-dbselect-list-content table, .ui-dbselect-list-headers table {
+    width: auto;
+    table-layout: fixed;
+}
+.ui-dbselect-list-content td {
+    cursor: pointer;
+}
+.ui-dbselect-list-content td, .ui-dbselect-list-headers td {
+	padding: 2px 5px;
+	border: #7f9db9 solid 1px;
+}
+.ui-dbselect-list-neadle {
+}
+.ui-dbselect-list-selrow {
+    font-weight: bold;
+}
+.ui-dbselect-list-firstrow td {
+    border-top: none;
+}
+.ui-dbselect-list-lastrow td {
+    border-bottom: none;
+}
+.ui-dbselect-list-hightlight {
+    background-color: #d9e9ff;
+}
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                        Tree decoration                                              *
+ *                                                                                                     *
+ *******************************************************************************************************/
+.ui-tree {
+    padding: 0;
+}
+.ui-tree li {
+    list-style: none;
+}
+.ui-tree ul {
+    background: transparent url(/img/tree/line.gif) -2px top repeat-y;
+}
+.ui-tree-node-single > ul, .ui-tree-node-last > ul {
+    background: none;
+}
+.ui-tree-element {
+    padding-left:  18px;
+    background-repeat: no-repeat;
+    background-position: left top;
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 16px;
+}
+.ui-tree-element-title {
+    display: block;
+    text-decoration: none;
+    padding-left:  18px;
+    background-repeat: no-repeat;
+    background-position: left top;
+    cursor: pointer;
+}
+.ui-tree-element-title:hover {
+    background-color: #dfeffc;
+}
+.ui-tree-element ul {
+    margin-left: -16px;
+}
+.ui-tree-node .ui-tree-element-title {
+    background-image: url(/img/tree/folder.gif);
+}
+.ui-tree-leaf .ui-tree-element-title {
+    background-image: url(/img/tree/control_play.gif);
+}
+.ui-tree-leaf {
+    background-image: url(/img/tree/line_m.gif);
+}
+.ui-tree-leaf-first {
+    background-image: url(/img/tree/line_f.gif);
+}
+.ui-tree-element .ui-tree-leaf-first {
+    background-image: url(/img/tree/line_m.gif);
+}
+.ui-tree-leaf-last {
+    background-image: url(/img/tree/line_l.gif);
+}
+.ui-tree-leaf-single {
+    padding-left: 0;
+}
+.ui-tree-element .ui-tree-leaf-single {
+    padding-left: 18px;
+    background-image: url(/img/tree/line_l.gif);
+}
+.ui-tree-leaf {
+    background-image: url(/img/tree/line_m.gif);
+}
+.ui-tree-leaf-first {
+    background-image: url(/img/tree/line_f.gif);
+}
+.ui-tree-element .ui-tree-leaf-first {
+    background-image: url(/img/tree/line_m.gif);
+}
+.ui-tree-leaf-last {
+    background-image: url(/img/tree/line_l.gif);
+}
+.ui-tree-leaf-single {
+    padding-left: 0;
+    background-image: none;
+}
+.ui-tree-element .ui-tree-leaf-single {
+    padding-left: 18px;
+    background-image: url(/img/tree/line_l.gif);
+}
+.ui-tree-node {
+    background-image: url(/img/tree/bullet_toggle_minus_m.gif);
+}
+.ui-tree-node-first {
+    background-image: url(/img/tree/bullet_toggle_minus_f.gif);
+}
+.ui-tree-element .ui-tree-node-first {
+    background-image: url(/img/tree/bullet_toggle_minus_m.gif);
+}
+.ui-tree-node-last {
+    background-image: url(/img/tree/bullet_toggle_minus_l.gif);
+}
+.ui-tree-node-single {
+    background-image: url(/img/tree/bullet_toggle_minus_a.gif);
+    /*padding-left: 0;*/
+}
+.ui-tree-element .ui-tree-node-single {
+    padding-left: 18px;
+    background-image: url(/img/tree/bullet_toggle_minus_l.gif);
+}
+.ui-tree-node.ui-tree-node-hidden {
+    background-image: url(/img/tree/bullet_toggle_plus_m.gif);
+}
+.ui-tree-node-first.ui-tree-node-hidden {
+    background-image: url(/img/tree/bullet_toggle_plus_f.gif);
+}
+.ui-tree-element .ui-tree-node-first.ui-tree-node-hidden {
+    background-image: url(/img/tree/bullet_toggle_plus_m.gif);
+}
+.ui-tree-node-last.ui-tree-node-hidden {
+    background-image: url(/img/tree/bullet_toggle_plus_l.gif);
+}
+.ui-tree-node-single.ui-tree-node-hidden {
+    background-image: url(/img/tree/bullet_toggle_plus_a.gif);
+    /*padding-left: 0;*/
+}
+.ui-tree-element .ui-tree-node-single.ui-tree-node-hidden {
+    padding-left: 18px;
+    background-image: url(/img/tree/bullet_toggle_plus_l.gif);
+}
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                      Checktree decoration                                           *
+ *                                                                                                     *
+ *******************************************************************************************************/
+ul.ui-checktree, ul.ui-checktree * {
+    list-style-type:none;
+    margin:0;
+    padding:0 0 5px;
+}
+ul.ui-checktree img.arrow {
+    border:0 none;
+    padding:2px 0 0;
+    width:20px;
+}
+ul.ui-checktree li {
+    padding:4px 0 0;
+}
+ul.ui-checktree li ul {
+    margin:0;
+    padding:0 0 0 20px;
+}
+ul.ui-checktree label {
+    cursor:pointer;
+    font-weight:bold;
+    padding:2px 0;
+}
+ul.ui-checktree label.hover {
+    color:red;
+}
+ul.ui-checktree li .arrow {
+    background:transparent none no-repeat scroll 0 4px;
+    cursor:pointer;
+    float:left;
+    height:18px;
+    margin:0;
+    padding:0;
+    width:20px;
+}
+ul.ui-checktree li .collapsed {
+    background-image:url(/img/checktree/collapsed.gif);
+}
+ul.ui-checktree li .expanded {
+    background-image:url(/img/checktree/expanded.gif);
+}
+ul.ui-checktree li .checkbox {
+    background:transparent url(/img/checktree/check0.gif) no-repeat scroll 0 0;
+    cursor:pointer;
+    float:left;
+    height:18px;
+    margin:0;
+    padding:0;
+    width:20px;
+}
+ul.ui-checktree li .checked {
+    background-image:url(/img/checktree/check2.gif);
+}
+ul.ui-checktree li .half_checked {
+    background-image:url(/img/checktree/check1.gif);
+}
+
+/*******************************************************************************************************
+ *                                                                                                     *
+ *                                      Toolbar decoration                                             *
+ *                                                                                                     *
+ *******************************************************************************************************/
+
+.ui-toolbar {
+    background: transparent url(/img/ui/ui-bg_highlight-soft_100_f6a828_1x100.png) repeat-x;
+}
+.ui-toolbar .ui-toolbar-group {
+    float: left;
+    border-left: 2px solid #c5dbec;
+    margin-right: 5px;
+}
+.ui-toolbar .ui-toolbar-group .ui-toolbar-button {
+    float: left;
+    margin-left: 2px;
+}
+
+/*************************************
+ * fix for datapicker with ui.layout *
+ *************************************/
+#ui-datepicker-div { z-index: 10000; }
+
+.ui-tile{border:1px solid transparent;}
+.ui-tile.ui-state-active, .ui-tile.ui-state-hover{border:1px solid #a6c9e2;}
+
+.ui-exchanger {margin:0;padding:0;overflow:hidden;}
+.ui-exchanger-recipient-holder,
+.ui-exchanger-control-holder,
+.ui-exchanger-donnor-holder {margin:0;padding:0;float: left;}
+.ui-exchanger-control {margin:5px auto;text-align:center;}
+.ui-exchanger-exchaged {font-style:italic;color:#b9b7af;}
+
+html>body .ui-exchanger-control-holder {width:50px;}
+
+form .ui-tabs .ui-tabs-panel fieldset,
+form .ui-tabs .ui-tabs-nav {font-family:Arial,Helvetica,sans-serif;font-size:10pt;}
+form .ui-tabs .ui-tabs-panel fieldset {line-height: 1em;}
+form .ui-tabs .ui-tabs-nav {line-height: 0.75em;}
+.ui-tabs .ui-tabs-nav li {list-style:none;}
+
+html>body #donnor-filter-form {overflow:visible;}
+
+.ui-label-ajaxload {
+    background-image: url(/img/icons/16x16/ajax-load.gif);
+    background-position: right center;
+    background-repeat: no-repeat;
+}

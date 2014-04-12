@@ -1,0 +1,51 @@
+<link href="/css/blanks/department.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+
+            $('fieldset').collapsibleFieldset().filter('#fieldset-notice').find('> legend').click();
+
+            <?php if ($this->blankEditable) { ?>
+            $('#parentDepartmentTitle').linkableField({
+                visibleParam: 'title',
+                basicUrl: '/administration/departments',
+                <?php if ($this->id) { ?>
+                getParams: {ignore: <?php echo $this->id; ?>},
+                <?php } ?>
+                idHolder: '#parentDepartmentId',
+                popupPhrases: {
+                    cancel: <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>,
+                    select: <?php echo Zend_Json::encode($this->translate('SelectCommand')); ?>,
+                    breakConnection: <?php echo Zend_Json::encode($this->translate('BreakConnectionCommand')); ?>,
+                    alert: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                    noSelection: <?php echo Zend_Json::encode($this->translate('NoObjectSelectedLinkingConfirm!HTML!')); ?>,
+                    ok: <?php echo Zend_Json::encode($this->translate('Ok')); ?>
+                }
+            });
+
+            self.createToolbar({
+                <?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>: {
+                    id: 'action-save',
+                    icon: '/img/icons/24x24/save.gif',
+                    action: function() {
+                        $('#blank-department')
+                            .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                            .submit();
+                    }
+                },
+                <?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>: {
+                    id: 'action-reset',
+                    icon: '/img/icons/24x24/reset.gif',
+                    action: function() {
+                        window.location.reload();
+                    }
+                }
+            });
+            <?php } else { ?>
+            $('#blank-department :input').attr('disabled', 'disabled');
+            <?php } ?>
+        }
+    });
+</script>

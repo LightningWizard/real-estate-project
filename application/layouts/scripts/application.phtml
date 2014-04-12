@@ -1,0 +1,257 @@
+<?php
+    $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
+    header('Content-Type: text/html; charset=UTF-8');
+?>
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <?php echo $this->headMeta() ?>
+        <?php echo $this->headTitle() ?>
+        <?php if ((!isset($this->mainWindow) || $this->mainWindow !== true) && (!defined('APPLICATION_ENV') || APPLICATION_ENV != 'development')) { ?>
+        <script type="text/javascript" language="javascript">
+            if (window.top == window) {
+                window.location = '/';
+            }
+        </script>
+        <?php } ?>
+        <?php echo $this->headLink() ?>
+        <?php echo $this->headStyle() ?>
+        <?php echo $this->headScript() ?>
+        <?php echo $this->jQuery(); ?>
+        <?php echo $this->layout()->scripts; ?>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function() {
+                page.init();
+                $('body > .ui-layout-north, body > .ui-layout-west, body > .ui-layout-east').each(function() {
+                    var content = $(this);
+                    if ($.trim(content.html()) != '') {
+                        content = content.find('> .ui-layout-pane-content');
+                        if (content.size() && $.trim(content.html()) == '') {
+                            content.end().remove();
+                        }
+                    } else {
+                        content.remove();
+                    }
+                });
+
+                page.beforePageLayout();
+
+                layout = $('body').layout({
+                    applyDefaultStyles: false,
+                    scrollToBookmarkOnLoad: false,
+                    showOverflowOnHover: false,
+                    contentSelector: '.ui-layout-pane-content',
+                    contentIgnoreSelector: '.ui-layout-ignore',
+                    closable: true,
+                    resizable: true,
+                    slidable: true,
+                    minSize: 0,
+                    maxSize: 0,
+                    spacing_open: 5,
+                    spacing_close: 5,
+                    slideTrigger_open: 'mouseover',
+                    slideTrigger_close: 'mouseout',
+                    resizerTip: <?php echo Zend_Json::encode($this->translate('Resize')); ?>,
+                    sliderTip: <?php echo Zend_Json::encode($this->translate('SlideOpen')); ?>,
+                    togglerTip_open: <?php echo Zend_Json::encode($this->translate('Close')); ?>,
+                    togglerTip_closed: <?php echo Zend_Json::encode($this->translate('Open')); ?>,
+                    enableCursorHotkey: false,
+                    north__resizable: false,
+                    north__initClosed: false,
+                    north__togglerLength_open: 0,
+                    north__togglerLength_closed: 0,
+                    east__size: 300,
+                    east_maxSize: 500,
+                    south__resizable: false,
+                    south__initHidden: top != window,
+                    south__togglerLength_open: 0,
+                    south__togglerLength_closed: 0,
+                    west__size: 300,
+                    west__maxSize: 500
+                });
+                if ($('body > .ui-layout-north').size()) {
+                    $('<div />')
+                        .addClass('ui-layout-button pin-button')
+                        .prependTo('body > .ui-layout-north');
+                    layout.addPinBtn('body > .ui-layout-north .pin-button', 'north');
+                }
+                if ($('body > .ui-layout-east').size()) {
+
+                }
+                if ($('body > .ui-layout-south').size()) {
+                    $('<div />')
+                        .addClass('ui-layout-button pin-button')
+                        .prependTo('body > .ui-layout-south');
+                    layout.addPinBtn('body > .ui-layout-south .pin-button', 'south');
+                    $("#application-dockbar").dockbar({
+                        onChange: top != window ? function(windowCount) { if (windowCount) { layout.show('south'); } else { layout.hide('south'); } } : false,
+                        clearBtn: true,
+                        clearAllText: <?php echo Zend_Json::encode($this->translate('ClosePassivWindows')); ?>,
+                        clearAllConfirmText: <?php echo Zend_Json::encode($this->translate('ClosePassivWindowsConfirm')); ?>,
+                        yesText: <?php echo Zend_Json::encode($this->translate('Yes')); ?>,
+                        noText: <?php echo Zend_Json::encode($this->translate('No')); ?>,
+                        clearAllImg: '/img/window/minimize.gif'
+                    });
+                    layout.options.south.onresize = layout.options.south.onopen = function() { $("#application-dockbar").dockbar("resize");  };
+                }
+                if ($('body > .ui-layout-west').size()) {
+                    $('<div />')
+                        .addClass('ui-layout-button pin-button')
+                        .prependTo('body > .ui-layout-west > .ui-layout-pane-header');
+                    layout.addPinBtn('body > .ui-layout-west .pin-button', 'west');
+                    $("#application-navigation > ul.navigation")
+                       .find('> li > a, > li > ul')
+                           .wrap('<div />')
+                           .end()
+                       .accordion({
+                           fillSpace: true
+                       })
+                       .find('> li > div > ul')
+                           .tree({
+                               action: function(title, url) {
+                                   if (url.charAt(0) != '#') {
+                                       $('<div />').iwindow({title: title, url: url});
+                                       return true;
+                                   } else {
+                                       return false;
+                                   }
+                               }
+                           });
+                    layout.options.west.onresize = function () { $("#application-navigation > ul.navigation").accordion("resize"); };
+                }
+                if ($('body > .ui-layout-center').size()) {
+                    var onResizeCenterHandlers = [];
+                    layout.options.center.onresize = function () {
+                        for (var i = 0, j = onResizeCenterHandlers.length; i < j; i++) {
+                           if ($.isFunction(onResizeCenterHandlers[i])) {
+                                onResizeCenterHandlers[i]();
+                           }
+                        }
+                    };
+
+                    var grid = $('#list');
+                    if (grid.size()) {
+                        var holder = grid.parents('.ui-layout-pane:eq(0)').css('padding', '0 !important');
+                        var filter = $('body > .ui-layout-center .ui-jqgrid-filter:eq(0)');
+                        if (filter.size()) {
+                             var gridHolder = $('<div />')
+                                 .attr('id', 'page-holder-grid')
+                                 .addClass('ui-layout-center');
+                             var filterHolder = $('<div />')
+                                .attr('id', 'page-holder-filter')
+                                .addClass('ui-layout-south')
+                                .append(
+                                    filter
+                                        .remove()
+                                        .jqGridFilter({
+                                            grid: grid,
+                                            btnFilter: {
+                                                show: true,
+                                                title: <?php echo Zend_Json::encode($this->translate('FilterCommand')); ?>
+                                            },
+                                            btnReset: {
+                                                show: true,
+                                                title: <?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>
+                                            }
+                                        })
+                                );
+                             $("#application-dockarea").addClass('ui-layout-pane-nopadding');
+                             layout.options.center.innerLayout = holder
+                                .wrapInner(gridHolder)
+                                .append(filterHolder)
+                                .layout({
+                                    applyDefaultStyles: true,
+                                    scrollToBookmarkOnLoad: false,
+                                    showOverflowOnHover: false,
+                                    contentSelector: '.ui-layout-pane-content',
+                                    contentIgnoreSelector: '.ui-layout-ignore',
+                                    closable: true,
+                                    resiazble: true,
+                                    slidable: true,
+                                    minSize: 0,
+                                    maxSize: 0,
+                                    spacing_open: 0,
+                                    spacing_close: 5,
+                                    slideTrigger_open: 'mouseover',
+                                    slideTrigger_close: 'mouseout',
+                                    resizerTip: layout.options.defaults.resizerTip,
+                                    sliderTip: layout.options.defaults.sliderTip,
+                                    togglerTip_open: layout.options.defaults.togglerTip_open,
+                                    togglerTip_closed: layout.options.defaults.togglerTip_closed,
+                                    enableCursorHotkey: false,
+                                    center__onresize: function() {
+                                        var gridHolder = $('#page-holder-grid');
+                                        gridHolder.css('overflow', 'hidden');
+                                        grid.setGridHeight(gridHolder.height() - ($('div.ui-jqgrid').height() - $('div.ui-jqgrid-bdiv').height()))
+                                            .setGridWidth(gridHolder.width(), false);
+                                    },
+                                    south__resizable: false,
+                                    south__initClosed: false,
+                                    south__togglerLength_open: 0,
+                                    south__togglerLength_closed: 0
+                                });
+                            $('<div />')
+                                .addClass('ui-layout-button pin-button')
+                                .prependTo('#page-holder-filter');
+                            layout.options.center.innerLayout.addPinBtn('#page-holder-filter > .pin-button', 'south');
+                            onResizeCenterHandlers.push(layout.options.center.innerLayout.resizeAll);
+                        } else {
+                            onResizeCenterHandlers.push(function() {
+                                holder.css('overflow', 'hidden');
+                                grid.setGridHeight(holder.height() - ($('div.ui-jqgrid').height() - $('div.ui-jqgrid-bdiv').height()))
+                                    .setGridWidth(holder.width(), false);
+                            });
+                        }
+                    }
+
+                    $("#application-dockarea").dockarea({
+                        offsetCorrection: {
+                            x: 0,
+                            y: top == window ? 0 : function() { return -this.offsetTop; }
+                        }
+                    });
+                    onResizeCenterHandlers.push(function() {
+                        $('.ui-iwindow-cover').show();
+                        $('.ui-dockbar .ui-dialog-link.ui-state-active').removeClass('ui-state-active');
+//                        $("#application-dockarea").dockarea("resize");
+                    });
+
+                    onResizeCenterHandlers.push(page.onResize);
+                }
+
+                $('.pin-button')
+                   .addClass('ui-corner-all ui-layout-ignore')
+                   .bind('mouseover', function() {
+                       $(this).addClass('ui-state-hover');
+                    })
+                   .bind('mousedown', function() {
+                       $(this).addClass('ui-state-active');
+                    })
+                   .bind('mouseup', function() {
+                       $(this).removeClass('ui-state-active');
+                    })
+                   .bind('mouseout.ui-button', function() {
+                        $(this).removeClass('ui-state-hover ui-state-focus ui-state-active');
+                    })
+                   .append('<div class="pin-button-icon ui-icon" />');
+
+                page.afterPageLayout();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="application-toolbar" class="application-header ui-toolbar ui-layout-north">
+            <?php echo $this->layout()->toolbar; ?>
+        </div>
+        <div id="application-dockarea" class="application-content ui-layout-center">
+            <?php echo $this->layout()->content?>
+        </div>
+        <div class="ui-layout-west ui-widget ui-dialog">
+            <div class="ui-layout-pane-header ui-widget-header ui-dialog-titlebar ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title"><?php echo $this->escape($this->translate('NavigationPanel')); ?></span></div>
+            <div id="application-navigation" class="ui-layout-pane-content"><?php echo $this->layout()->navigation; ?></div>
+        </div>
+        <div class="application-footer ui-layout-south">
+            <div id="application-dockbar" class="ui-layout-pane-content ui-dockbar"></div>
+        </div>
+    </body>
+</html>

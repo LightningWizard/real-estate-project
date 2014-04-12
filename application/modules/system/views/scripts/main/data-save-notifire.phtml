@@ -1,0 +1,49 @@
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        var notifire  = $('<div />')
+                            .addClass('ui-widget')
+                            .css({
+                                width: '300px',
+                                position: 'absolute',
+                                top: '0',
+                                right: '0',
+                                marginTop: '55px',
+                                marginRight: '55px',
+                                fontSize: '1em',
+                                zIndex: '100000'
+                            }),
+            container = $('<div />')
+                            .addClass('ui-corner-all')
+                            .addClass('<?php echo $this->success ? 'ui-state-highlight' : 'ui-state-error'; ?>')
+                            .css({
+                                padding: '5px'
+                            })
+                            .appendTo(notifire),
+            box       = $('<p />')
+                            .css({
+                                textAlign: 'justify'
+                            })
+                            .text(<?php echo Zend_Json::encode($this->translate($this->success ? 'DataSavedSuccess' : 'DataSavedFail')); ?>)
+                            .appendTo(container),
+            icon      = $('<span />')
+                            .addClass('ui-icon')
+                            .addClass('<?php echo $this->success ? 'ui-icon-info' : 'ui-icon-alert'; ?>')
+                            .css({
+                                'float': 'left',
+                                marginRight: '0.3em'
+                            })
+                            .prependTo(box);
+
+            notifire.appendTo('body');
+            var deleteNotifire = function() {
+                    notifire.fadeOut(1000, function() {notifire.unbind().remove()});
+                },
+                timer = setTimeout(deleteNotifire, 5000);
+            notifire
+                .click(function() {
+                    clearTimeout(timer);
+                    deleteNotifire();
+                })
+                .css('cursor', 'pointer');
+    });
+</script>

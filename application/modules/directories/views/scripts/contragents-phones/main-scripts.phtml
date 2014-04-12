@@ -1,0 +1,83 @@
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildToolbars();
+        },
+        buildToolbars: function() {
+            var self = this,
+                grid = $('#list'),
+                buttons = new Object();
+            <?php if($this->acl->assert('directories::contragents', 'edit')) { ?>
+            var editElementAction = function(){
+                     var rowId = grid.getGridParam('selrow'),
+                         rowData = grid.getRowData(rowId);
+                     $('<div />').iwindow({
+                        title: self.getFullRowTitle(rowId),
+                        url: '/directories/contragents/item/id/' + rowData.ContragentId + '/__command__/<?php echo md5('edit' . Zend_Session::getId()); ?>',
+                        maximized: true,
+                        bubble: true
+                    });
+                };
+            buttons[<?php echo Zend_Json::encode($this->translate('EditCommand')) ?>] = {
+               id: 'action-edit',
+               icon: '/img/icons/24x24/edit.gif',
+               action: editElementAction
+            };
+            <?php } ?>
+
+            self.createToolbar(buttons);
+            self.createGridToolbar(
+                <?php echo Zend_Json::encode($this->translate('RefreshCommand')); ?>,
+                false,
+                false,
+                false
+            );
+        },
+        beforePageLayout: function(){
+            var self = this;
+            self.constructor.prototype.beforePageLayout.call(self);
+
+            $('div.form-elements').width(700).each(function(){
+                var $formElements = $(this),
+                    $wrapperLeft = $('<div />').addClass('form-elements-left'),
+                    $wrapperRight = $('<div />').addClass('form-elements-right'),
+                    $evenElements = $formElements.find('div.form-element:even'),
+                    $oddElements = $formElements.find('div.form-element:odd');
+                $wrapperLeft.append($evenElements);
+                $wrapperRight.append($oddElements);
+                $formElements.append($wrapperLeft, $wrapperRight);
+                $wrapperLeft.width($formElements/2).css('float', 'left');
+                $wrapperRight.width($formElements/2).css('float', 'right');
+            });
+        },
+        afterPageLayout: function() {
+            var self = this;
+            self.constructor.prototype.afterPageLayout.call(self);
+
+            var popupPhrases = {
+                cancel: <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>,
+                select: <?php echo Zend_Json::encode($this->translate('SelectCommand')); ?>,
+                breakConnection: <?php echo Zend_Json::encode($this->translate('BreakConnectionCommand')); ?>,
+                alert: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                noSelection: <?php echo Zend_Json::encode($this->translate('NoObjectSelectedLinkingConfirm!HTML!')); ?>,
+                ok: <?php echo Zend_Json::encode($this->translate('Ok')); ?>
+            };
+            $('#contragentTitleFilter').each(function() { $(this).width($(this).width() - 20); }).linkableField({
+                visibleParam: ['Title'],
+                basicUrl: '/directories/contragents/main',
+                idHolder: '#contragentIdFilter',
+                popupPhrases: popupPhrases
+            });
+        },
+        getFullRowTitle: function(rowId) {
+            var data = $("#list").getRowData(rowId);
+            var title = <?php echo Zend_Json::encode($this->translate('Contragent')); ?>;
+            if (data.Contragent) {
+                title += (' "' + data.Contragent.replace(/<[^>]*>/g, "") + '"');
+            }
+            return title;
+        }
+    });
+</script>

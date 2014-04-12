@@ -1,0 +1,1293 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Андрей <kravchenko.and@gmail.com>\n"
+"Language-Team: LISSoft\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+
+# ##################################################################################################################################
+# 																																  #
+# 		Abstarct phrases													  #
+# 																																  #
+# ##################################################################################################################################
+msgid "Maintainer!HTML!"
+msgstr "ТОВ \"Лаборатория информационных систем\""
+
+msgid "ApplicationTitle"
+msgstr "Агентство недвижимости \"Эксклюзив\""
+
+msgid "ApplicationTitleLong"
+msgstr ""
+"Автоматизированная система ведения базы данных агентства недвижимости "
+"\"Эксклюзив\""
+
+msgid "AuthorizationInvitation"
+msgstr "Пожалуйста авторизируйтесь:"
+
+msgid "MainPageHello!HTML!"
+msgstr ""
+"<div>Выберите в навигационном меню раздел который хотите просмотреть.</div>"
+
+msgid "Error404Title"
+msgstr "Ошибка!"
+
+msgid "Error404Description!HTML!"
+msgstr "<p>Система не может выполнить команду. Неизвестная команда.</p>"
+
+msgid "Error403Title"
+msgstr "Доступ запрещен!"
+
+msgid "Error403Description!HTML!"
+msgstr ""
+"<p><strong>Попытка несанкционированного доступа!</strong> Ситема не может "
+"обработать Вашу команду.У Вас недостаточно прав.</p><p>Если Вам "
+"действительно необходимо выполнить данное действие,пожалуйста, обратитесь к "
+"администратору системы.</p>"
+
+msgid "Error501Title"
+msgstr "Команда отклонена!"
+
+msgid "Error501Description!HTML!"
+msgstr ""
+"<p><strong>Ошибка выполнения!</strong> Система не может обработать  команду."
+"</p>"
+
+msgid "ApplicationWindowCloseConfirm"
+msgstr ""
+"Внимание! Попытка закрыть главное окно системы.\n"
+"\n"
+"Все не сохраненные данные будут потеряны.\n"
+"\n"
+"Примечание: Перед закрытием главного окна желательно завершить сеанс. Кнопка "
+"\"Выход\"."
+
+msgid "UnsynchronizedDocumentUpdatingException"
+msgstr ""
+"<p>Не возможно сохранить изменения. Ваша версия данных устарела во время "
+"редактирования.</p>"
+
+msgid "NoJavaScriptEnnableAlert!HTML!"
+msgstr ""
+"<p><strong>Внимание!</strong> Запуск системы не возможен.</p><p>Для работы "
+"необходима поддержка JavaScript.Пожалуйста, проверте настройки Вашего "
+"браузера.</p>"
+
+msgid "Authorization"
+msgstr "Авторизация"
+
+msgid "Login"
+msgstr "Вход"
+
+msgid "Logout"
+msgstr "Выход"
+
+msgid "LogoutConfirmTitle"
+msgstr "Выход из системы"
+
+msgid "LogoutConfirmDescription!HTML!"
+msgstr ""
+"<p><strong>Внимание!</strong> Если есть несохраненные данные, они будут "
+"утеряны.</p><p>Вы хотите сейчас завершить сеанс работы с системой?</p>"
+
+msgid "LogoutConfirmYes"
+msgstr "Да, выйти"
+
+msgid "LogoutConfirmNo"
+msgstr "Нет, продолжить работу"
+
+msgid "ClosePassivWindows"
+msgstr "Закрыть неактивные страницы"
+
+msgid "ClosePassivWindowsConfirm"
+msgstr ""
+"Все несохраненные данные на других страницах реестра будут потеряны. "
+"Продолжить?"
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "PasswordOld"
+msgstr "Старый пароль"
+
+msgid "PasswordConfirmation"
+msgstr "Подтверждение пароля"
+
+msgid "NavigationPanel"
+msgstr "Навигационная панель"
+
+msgid "DataSavedSuccess"
+msgstr "Все изменения сохранены на сервере!"
+
+msgid "DataSavedFail"
+msgstr "Не возможно сохранить изменения, т.к. введены некорректые данные!"
+
+msgid "Notice"
+msgstr "Примечания"
+
+msgid "Group"
+msgstr "Группа"
+
+msgid "Other"
+msgstr "Другое"
+
+msgid "Title"
+msgstr "Название"
+
+msgid "TitleEn"
+msgstr "Название (англ.)"
+
+msgid "ShortTitle"
+msgstr "Короткое название"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Code"
+msgstr "Код"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "ContactData"
+msgstr "Контактная информация"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Fax"
+msgstr "Факс"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "MailingAddress"
+msgstr "Почтовый адрес"
+
+msgid "uk"
+msgstr "Украинский"
+
+msgid "ru"
+msgstr "Русский"
+
+msgid "en"
+msgstr "Английский"
+
+msgid "Ok"
+msgstr "Да"
+
+msgid "SelectCommand"
+msgstr "Выбрать"
+
+msgid "BreakConnectionCommand"
+msgstr "Разорвать связь"
+
+msgid "NoObjectSelectedLinkingConfirm!HTML!"
+msgstr ""
+"<p>Не возможно выполнить операцию,Вы не выбрали ни одной записи.</"
+"p><p>Пожалуйста, выберите запись.</p>"
+
+msgid "EmptyRequiredData!HTML!"
+msgstr ""
+"<p><strong>Внимание!</strong> Не возможно выполнить операцию, так как "
+"внесены не все данные.</p>"
+
+msgid "Alert"
+msgstr "Внимание!"
+
+msgid "Confirm"
+msgstr "Подтверждение"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "DocumentCode"
+msgstr "№"
+
+msgid "DocumentDate"
+msgstr "от"
+
+msgid "Field"
+msgstr "Поле"
+
+msgid "Fields"
+msgstr "Поля"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "CreateAction"
+msgstr "Создание"
+
+msgid "CreateCommand"
+msgstr "Создать"
+
+msgid "AddAction"
+msgstr "Добавление"
+
+msgid "AddCommand"
+msgstr "Добавить"
+
+msgid "DeleteAction"
+msgstr "Удаление"
+
+msgid "DeleteCommand"
+msgstr "Удалить"
+
+msgid "EditAction"
+msgstr "Редактирование"
+
+msgid "EditCommand"
+msgstr "Редактировать"
+
+msgid "SelectAllCommand"
+msgstr "Отменить все"
+
+msgid "DeselectAllCommand"
+msgstr "Снять отметку со всех"
+
+msgid "ToggleSelectionCommand"
+msgstr "Инвертировать выбор"
+
+msgid "SaveAction"
+msgstr "Сохранение"
+
+msgid "SaveCommand"
+msgstr "Сохранить"
+
+msgid "ExtrimSaveCommand"
+msgstr "Сохранить в экстренном режиме"
+
+msgid "ApplyAction"
+msgstr "Применение"
+
+msgid "ApplyCommand"
+msgstr "Применить"
+
+msgid "ExecuteCommand"
+msgstr "Выполнить"
+
+msgid "CancelAction"
+msgstr "Отмена"
+
+msgid "CancelCommand"
+msgstr "Отменить"
+
+msgid "CloseAction"
+msgstr "Закрытие"
+
+msgid "CloseCommand"
+msgstr "Закрыть"
+
+msgid "LoadAction"
+msgstr "Загрузка"
+
+msgid "LoadCommand"
+msgstr "Загрузить"
+
+msgid "UploadCommand"
+msgstr "Загрузить файл"
+
+msgid "DownloadCommand"
+msgstr "Скачать файл"
+
+msgid "RefreshAction"
+msgstr "Обновление"
+
+msgid "RefreshCommand"
+msgstr "Обновить"
+
+msgid "ClearCommand"
+msgstr "Очистить"
+
+msgid "GenerateCommand"
+msgstr "Сгенерировать"
+
+msgid "SorAction"
+msgstr "Сортировка"
+
+msgid "SortCommand"
+msgstr "Сортировать"
+
+msgid "SortAscCommand"
+msgstr "Сортировать по возрастанию"
+
+msgid "SortDescCommand"
+msgstr "Сортировать по убыванию"
+
+msgid "FilterCommand"
+msgstr "Поиск"
+
+msgid "PrintCommand"
+msgstr "Печать"
+
+msgid "FilterAction"
+msgstr "Поиск"
+
+msgid "ResetCommand"
+msgstr "Сбросить"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "NotSet"
+msgstr "Не задано"
+
+msgid "Selected"
+msgstr "Выбранные"
+
+msgid "OneSelected"
+msgstr "Выбраный"
+
+msgid "DeleteAbstractConfirm!HTML!"
+msgstr "<p>Вы действительно хотите удалить выбранные записи?</p>"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "Open"
+msgstr "Открыть"
+
+# ################################################################################################################################
+# 																																#
+# 											Administration, users and roles   													#
+# 																																#
+# ################################################################################################################################
+msgid "Administartion"
+msgstr "Управление системой"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Account"
+msgstr "Учетная запись"
+
+msgid "LastName"
+msgstr "Фамилия"
+
+msgid "FirstName"
+msgstr "Имя"
+
+msgid "SecondName"
+msgstr "Отчество"
+
+msgid "AccountIsActive"
+msgstr "Активный"
+
+msgid "LockUsersAction"
+msgstr "Блокирование учетных записей"
+
+msgid "LockUserConfirm!HTML!"
+msgstr ""
+"<p><strong>Внимание!</strong> Пользователи не смогут авторизироваться, "
+"используя заблокированные учетные записи. У дальнейшем Вы сможете "
+"разблокировать учетные записи.</p><p>Вы уверенны, что хотите заблокировать "
+"следующие учетные записи:</p>"
+
+msgid "UnlockUsersAction"
+msgstr "Разблокирование учетных записей"
+
+msgid "UnlockUserConfirm!HTML!"
+msgstr ""
+"<p><strong>Внимание!</strong>Пользователи смогут работать с ситемой, "
+"используя разблокированные учетные записи. В дальнейшем Вы сможете "
+"заблокировать учетные записи.</p><p>Вы уверенны, что хотите разблокировать "
+"следующие учетные записи:</p>"
+
+msgid "CreateAccountAction"
+msgstr "Создание учетной записи"
+
+msgid "EditAccountAction"
+msgstr "Редактирование учетной записи"
+
+msgid "SystemAuthentificationData"
+msgstr "Параметры учетной записи"
+
+msgid "ProfileData"
+msgstr "Информация о пользователе"
+
+msgid "Employee"
+msgstr "Сотрудник"
+
+msgid "Education"
+msgstr "Образование"
+
+msgid "EducationMain"
+msgstr "Образование (основное)"
+
+msgid "EducationDiploma"
+msgstr "№ и дата выдачи диплома"
+
+msgid "EducationAdditional"
+msgstr "Образование (дополнительное)"
+
+msgid "ChangePasswordCommand"
+msgstr "Сменить пароль"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "UserGroups"
+msgstr "Группы пользователей"
+
+msgid "Appointment"
+msgstr "Должность"
+
+msgid "AppointmentDate"
+msgstr "Дата назначения"
+
+msgid "Qualification"
+msgstr "Квалификация"
+
+msgid "UserExperience"
+msgstr "Стаж работы по специальности"
+
+msgid "Competence"
+msgstr "Компетентность"
+
+msgid "DepartmentSection"
+msgstr "Отдел"
+
+msgid "PasportData"
+msgstr "Паспортные данные"
+
+msgid "SerialAndNumber"
+msgstr "Серия и номер"
+
+msgid "IssuedBy"
+msgstr "Выдан"
+
+msgid "IssuedDate"
+msgstr "Дата выдачи"
+
+msgid "Birthdate"
+msgstr "Дата рождения"
+
+msgid "Sex"
+msgstr "Пол"
+
+msgid "Female"
+msgstr "Женский"
+
+msgid "Male"
+msgstr "Мужской"
+
+msgid "MaritalStatus"
+msgstr "Семейное положение"
+
+msgid "Nationality"
+msgstr "Национальность"
+
+msgid "PhoneWork"
+msgstr "Тел. (раб.)"
+
+msgid "PhoneMobile"
+msgstr "Тел. (моб.)"
+
+msgid "PhoneHome"
+msgstr "Тел. (дом.)"
+
+msgid "SystemRegistrationData"
+msgstr "Регистрация в системе"
+
+msgid "PersonalData"
+msgstr "Личные данные"
+
+msgid "OfficeData"
+msgstr "Служебные данные"
+
+msgid "Credentials"
+msgstr "Полномочия"
+
+msgid "CreateDesctopShortcut"
+msgstr "Создать ярлык на рабочем столе"
+
+msgid "MainData"
+msgstr "Основные сведения"
+
+msgid "AdditionalData"
+msgstr "Дополнительные сведения"
+
+msgid "CommonData"
+msgstr "Общие данные"
+
+msgid "EDRPOU"
+msgstr "ЕГРПОУ"
+
+msgid "Address"
+msgstr "Адрес"
+
+msgid "AddressFullPhysic"
+msgstr "Физический адрес"
+
+msgid "Roles"
+msgstr "Роли"
+
+msgid "Role"
+msgstr "Роль"
+
+msgid "NewRole"
+msgstr "Регистрация роли"
+
+msgid "RolePermissions"
+msgstr "Права доступа"
+
+msgid "Resource"
+msgstr "Ресурс"
+
+msgid "PermRead"
+msgstr "Просмотр"
+
+msgid "PermEdit"
+msgstr "Редактирование"
+
+msgid "PermRemove"
+msgstr "Удаление"
+
+msgid "PermExecute"
+msgstr "Исполнение"
+
+msgid "PermExtrim"
+msgstr "Экстренные"
+
+msgid "DeleteRoleConfirm!HTML!"
+msgstr ""
+"<p>Вы действительно хотите удалить отмеченные роли?</p><p><strong>ВНИМАНИЕ!</"
+"strong> Результаты выполнения данной операции невозможно будет отменить.</p>"
+
+msgid "UserRoleCalculationExplanation!HTML!"
+msgstr ""
+"<p>Роли  назначаются на основании отдела, в котором работает пользователь, и "
+"его полномочий (См. вкладку \"Служебные данные\").</p><p>При формировании "
+"списка ролей во внимание принимаются только сохраненные данные.</p>"
+
+msgid "StructuralUnits"
+msgstr "Структурные подразделения"
+
+msgid "UsersSpecializations"
+msgstr "Специализация пользователей"
+
+msgid "Department"
+msgstr "Структурное подразделение"
+
+msgid "Departments"
+msgstr "Структурные подразделения"
+
+msgid "NewDepartment"
+msgstr "Регистрация структурного подразделения"
+
+msgid "ParentDepartment"
+msgstr "Выше стоящее подразделение"
+
+msgid "DeleteDepartmentConfirm!HTML!"
+msgstr ""
+"<p>Вы действительно хотите удалить выбранное структурное подразделение?</"
+"p><p><strong>ВНИМАНИЕ!</strong> Все входящие в него подразделениятакже будут "
+"удалены из системы.</p><p><strong>ВНИМАНИЕ!</strong> Результаты выполнения "
+"данной операции невозможно будет отменить.</p>"
+
+msgid "Specialization"
+msgstr "Специализация пользователя"
+
+msgid "Specializations"
+msgstr "Специализации пользователей"
+
+msgid "NewSpecialization"
+msgstr "Регистрация специализации пользователя"
+
+msgid "ParentSpecialization"
+msgstr "Уточнение специализации"
+
+msgid "DeleteSpecializationConfirm!HTML!"
+msgstr ""
+"<p>Вы действительно хотите удалить выбранную специализацию пользователя?</"
+"p><p><strong>ВНИМАНИЕ!</strong> Все уточняющие специализации также будут "
+"удалены из системы.</p><p><strong>ВНИМАНИЕ!</strong>Результаты выполнения "
+"данной операции не возможно будет отменить.</p>"
+
+# ################################################################################################################################
+#
+#     Directories    																#
+#
+# ################################################################################################################################
+msgid "Directories"
+msgstr "Справочники"
+
+msgid "District"
+msgstr "Район"
+
+msgid "Districts"
+msgstr "Районы"
+
+msgid "GeographicalDistrictsInContext"
+msgstr "Географические"
+
+msgid "AdministrativeDistrictsInContext"
+msgstr "Административные"
+
+msgid "GeographicalDistricts"
+msgstr "Географические районы"
+
+msgid "GeographicalDistrict"
+msgstr "Географический район"
+
+msgid "NewGeographicalDistrict"
+msgstr "Регистрация географического района"
+
+msgid "AdministrativeDistricts"
+msgstr "Административные районы"
+
+msgid "AdministrativeDistrict"
+msgstr "Административный район"
+
+msgid "NewAdministrativeDistrict"
+msgstr "Регистрация административного района"
+
+msgid "Zones"
+msgstr "Зоны"
+
+msgid "Zone"
+msgstr "Зона"
+
+msgid "NewZone"
+msgstr "Регистрация зоны"
+
+msgid "StreetTypes"
+msgstr "Типы улиц"
+
+msgid "StreetType"
+msgstr "Тип улицы"
+
+msgid "NewStreetType"
+msgstr "Регистрация нового типа улиц"
+
+msgid "Contragents"
+msgstr "Контрагенты"
+
+msgid "Contragent"
+msgstr "Контрагент"
+
+msgid "NewContragent"
+msgstr "Регистрация нового контрагента"
+
+msgid "Phones"
+msgstr "Телефоны"
+
+msgid "ContragentTitle"
+msgstr "Название или Ф.И.О контрагента"
+
+msgid "ContragentType"
+msgstr "Тип контрагента"
+
+msgid "WebSite"
+msgstr "Веб-сайт"
+
+msgid "Seller"
+msgstr "Продавец"
+
+msgid "RealEstateAgency"
+msgstr "Агенство недвижимости"
+
+msgid "RealEstate"
+msgstr "Недвижимость"
+
+msgid "RealEstateTypes"
+msgstr "Типы объекта"
+
+msgid "RealEstateType"
+msgstr "Тип объекта"
+
+msgid "NewRealEstateType"
+msgstr "Регистрация нового типа объекта"
+
+msgid "Purpose"
+msgstr "Назначение"
+
+msgid "Commercial"
+msgstr "Коммерческая"
+
+msgid "NoCommercial"
+msgstr "Некоммерческая"
+
+msgid "RealEstateTypePurpose"
+msgstr "Целевое назначение"
+
+msgid "HeatingTypes"
+msgstr "Типы отопления"
+
+msgid "HeatingType"
+msgstr "Тип отопления"
+
+msgid "NewHeatingType"
+msgstr "Регистрация нового типа отопления"
+
+msgid "HotWaterSupplyTypes"
+msgstr "Типы горячего водоснабжения"
+
+msgid "HotWaterSupplyType"
+msgstr "Тип горячего водоснабжения"
+
+msgid "NewHotWaterSupplyType"
+msgstr "Регистрация нового типа горячего водоснабжения"
+
+msgid "Streets"
+msgstr "Улицы"
+
+msgid "Street"
+msgstr "Улица"
+
+msgid "NewStreet"
+msgstr "Регистрация новой улицы"
+
+msgid "Realtor"
+msgstr "Риелтор"
+
+msgid "Builder"
+msgstr "Застройщик"
+
+msgid "PlanningTypes"
+msgstr "Типы планировок"
+
+msgid "PlanningType"
+msgstr "Тип планировки"
+
+msgid "NewPlanningType"
+msgstr "Регистрация нового типа планировки"
+
+msgid "StreetTypeShort"
+msgstr "Краткое название"
+
+msgid "DistrictTitle"
+msgstr "Название района"
+
+msgid "RealEstatePurposes"
+msgstr "Целевые назначения"
+
+msgid "RealEstatePurpose"
+msgstr "Целевое назначение"
+
+msgid "NewRealEstatePurpose"
+msgstr "Регистрация нового целевого назначения"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Settlements"
+msgstr "Населенные пункты"
+
+msgid "Settlement"
+msgstr "Населенный пункт"
+
+msgid "NewSettlement"
+msgstr "Регистрация нового населенного пункта"
+
+msgid "ProposalStatus"
+msgstr "Статус объекта недвижимости"
+
+msgid "ProposalStatuses"
+msgstr "Статусы объекта недвижимости"
+
+msgid "NewProposalStatus"
+msgstr "Регистрация статуса объекта недвижимости"
+
+msgid "ContragentsPhones"
+msgstr "Телефоны контрагентов"
+
+msgid "BathroomType"
+msgstr "Тип сан. узла"
+
+msgid "BathroomTypes"
+msgstr "Типы сан. узла"
+
+msgid "NewBathroomType"
+msgstr "Новый тип сан. узла"
+
+msgid "Record with value %value% already exists in table"
+msgstr "Запись со значением %value% уже существует в таблице"
+
+msgid "Data"
+msgstr "Данные"
+
+msgid "DataFilter"
+msgstr "Поиск"
+
+# ################################################################################################################################
+#
+#     Workspace    																#
+#
+# ################################################################################################################################
+msgid "Workspace"
+msgstr "Рабочая область"
+
+msgid "RealEstateProposals"
+msgstr "Объекты недвижимости"
+
+msgid "RealEstateProposal"
+msgstr "Объект недвижимости"
+
+msgid "NewRealEstateProposal"
+msgstr "Регистрация объекта недвижимости"
+
+msgid "Contract"
+msgstr "Договор"
+
+msgid "ContractCode"
+msgstr "№ договора"
+
+msgid "ContractDate"
+msgstr "Дата договора"
+
+msgid "RealEstateObject"
+msgstr "Объект недвижимости"
+
+msgid "RealEstateProposalType"
+msgstr "Статус"
+
+msgid "Buying"
+msgstr "Покупается"
+
+msgid "Selling"
+msgstr "Продается"
+
+msgid "Exchange"
+msgstr "Меняется"
+
+msgid "Rental"
+msgstr "Арендуется"
+
+msgid "ForLiving"
+msgstr "Жилое"
+
+msgid "NotForLiving"
+msgstr "Нежилое"
+
+msgid "TotalArea"
+msgstr "Общая площадь"
+
+msgid "LivingArea"
+msgstr "Жилая площадь"
+
+msgid "Sewerage"
+msgstr "Канализация"
+
+msgid "Gas"
+msgstr "Газ"
+
+msgid "Electricity"
+msgstr "Электричество"
+
+msgid "BalconiesAndLoggiasCount"
+msgstr "Балкон/лоджия (количество)"
+
+msgid "StartExploitYear"
+msgstr "Год ввода в эксплуатацию"
+
+msgid "RoomsCount"
+msgstr "Количество жилих помещений"
+
+msgid "LandlotArea"
+msgstr "Площадь земельного участка"
+
+msgid "LandlotPurpose"
+msgstr "Назначение земельного участка"
+
+msgid "Price"
+msgstr "Цена"
+
+msgid "ContragentPrice"
+msgstr "Цена контрагента"
+
+msgid "AgencyPrice"
+msgstr "Цена агенства"
+
+msgid "RealtorName"
+msgstr "Ф.И.О риэлтора"
+
+msgid "ExchangeFor"
+msgstr "Обмен на"
+
+msgid "EnteringDate"
+msgstr "Дата ввода"
+
+msgid "LastCallingDate"
+msgstr "Дата последнего прозвона"
+
+msgid "StoreyInfo"
+msgstr "Этаж/этажность"
+
+msgid "RoomsAreas"
+msgstr "Площади помещений"
+
+msgid "RoomsAreasU"
+msgstr "Площади помещений (кв. м)"
+
+msgid "Privatization"
+msgstr "Приватизация"
+
+msgid "Water"
+msgstr "Вода"
+
+msgid "ViewOfTheSea"
+msgstr "Вид на море"
+
+msgid "ObjectParams"
+msgstr "Характеристики объекта"
+
+msgid "RealEstateObjects"
+msgstr "Объекты недвижимости"
+
+msgid "Area"
+msgstr "Площадь"
+
+msgid "ProposalBlankSettings"
+msgstr "Настройки основной формы"
+
+msgid "NewProposalBlankSettings"
+msgstr "Регистрация новой группы настроек основной формы"
+
+msgid "ForRealEstateTypeInContext"
+msgstr "для типа недвижимости"
+
+msgid "ProposalBlankFieldsForDisplay"
+msgstr "Поля основной формы для отображения"
+
+msgid "FieldName"
+msgstr "Название поля"
+
+msgid "FieldIsVisible"
+msgstr "Отображать на форме"
+
+msgid "Coupling"
+msgstr "Стыковка"
+
+msgid "CouplingWithSiteKurerInContext"
+msgstr "С сайтом газеты \"Курьер\""
+
+msgid "CouplingWithSiteKurer"
+msgstr "Стыковка с сайтом газеты \"Курьер\""
+
+msgid "CouplingWithCallJournalInContext"
+msgstr "С файлом от газеты \"Позвоните\""
+
+msgid "CouplingWithCallJournal"
+msgstr "Стыковка с файлом от газеты \"Позвоните\""
+
+msgid "Announcement"
+msgstr "Объявление"
+
+msgid "CouplingDate"
+msgstr "Дата стыковки"
+
+msgid "LoadDataFromSiteKurerConfirm"
+msgstr "Загрузить данные из сайта газеты \"Курьер\"?"
+
+msgid "ImportedRowsCountInContext"
+msgstr "Записей импортировано"
+
+msgid "ContragentPhones"
+msgstr "Телефоны контрагента"
+
+msgid "BuildingNumber"
+msgstr "№ дома"
+
+msgid "FlatNumber"
+msgstr "№ квартиры"
+
+msgid "ContragentSearchByPhoneDescription"
+msgstr "Введите номер телефона и нажмите\"Искать\""
+
+msgid "ContragentSearch"
+msgstr "Поиск контрагента"
+
+msgid "ContragentNotFound"
+msgstr "Контрагент не найден"
+
+msgid "ContragentExistInDb"
+msgstr "Контрагент существует"
+
+msgid "NewContragentSaveFail"
+msgstr ""
+"Невозможно сохранить данные, поскольку контрагент \"%%title%%\"  уже "
+"существует."
+
+msgid "NewContragentSaveСonfirm"
+msgstr ""
+"Сохранить в базе нового контрагента \"%%title%%\" и прикрепить его к объекту "
+"недвижимости?"
+
+msgid "ComplexArea"
+msgstr "Площадь (общая/жилая/кухни)"
+
+msgid "ComplexAreaDescription"
+msgstr "3 целых числа, разделенные /"
+
+msgid "RoomsAreaDescription"
+msgstr "Целые числа, разделенные /"
+
+msgid "Bathroom"
+msgstr "Сан. узел"
+
+msgid "Owner"
+msgstr "Владелец"
+
+msgid "ValueNotMatchPattern"
+msgstr "Значение %%value%% не соответствует шаблону"
+
+msgid "SelectHeadingForCoupling"
+msgstr "Выберите рубрику для стыковки"
+
+msgid "KurerBuy"
+msgstr "Покупают"
+
+msgid "KurerSell"
+msgstr "Продают"
+
+msgid "KurerExchange"
+msgstr "Обмен"
+
+msgid "DataSource"
+msgstr "Источник данных"
+
+msgid "DateFrom"
+msgstr "С"
+
+msgid "DateTo"
+msgstr "По"
+
+msgid "AgenciesPhones"
+msgstr "Телефоны агенств"
+
+msgid "UndefinedPhones"
+msgstr "Неизвестные телефоны"
+
+msgid "SiteKurerSectionBuy"
+msgstr "Раздел \"Покупают\""
+
+msgid "SiteKurerSectionSell"
+msgstr "Раздел \"Продают\""
+
+msgid "SiteKurerSectionExchange"
+msgstr "Раздел \"Обмен\""
+
+msgid "OwnerPhones"
+msgstr "Телефоны владельца"
+
+msgid "EnteringAddress"
+msgstr "Ввод адреса"
+
+msgid "PriceFromFilter"
+msgstr "Цена от"
+
+msgid "PriceToFilter"
+msgstr "до"
+
+msgid "PhysicalPerson"
+msgstr "Физическое лицо"
+
+msgid "FoundPhones"
+msgstr "Найденные телефоны"
+
+msgid "All"
+msgstr "Все"
+
+msgid "TextFile"
+msgstr "Текстовый файл"
+
+msgid "TextFileForCoupling"
+msgstr "Текстовый файл для стыковки"
+
+msgid "PhoneContainOnlyDigits"
+msgstr "Телефон должен содержать только цифроые символы"
+
+msgid "PhoneAlreadyExists"
+msgstr "Телефоны контрагента должны быть уникальными"
+
+msgid "AnotherContragentPhone"
+msgstr "Телефон закреплен за другим контрагентом: \"%owner%\""
+
+msgid "TransferToMainTableCommand"
+msgstr "Перенос в основную таблицу"
+
+msgid "File '%value%' exceeds the defined ini size"
+msgstr ""
+"Размер файла '%value%' превышает допустимый размер, указаннай в php.ini"
+
+msgid "File '%value%' exceeds the defined form size"
+msgstr "Размер файла '%value%' превышает допустимый размер, указанный в форме"
+
+msgid "File '%value%' was only partially uploaded"
+msgstr "Файл '%value%' был загружен частично"
+
+msgid "File '%value%' was not uploaded"
+msgstr "Файл '%value%' не был загружен"
+
+msgid "No temporary directory was found for file '%value%'"
+msgstr "Не найдена временная папка для файла '%value%'"
+
+msgid "File '%value%' can't be written"
+msgstr "Файл '%value%' не может быть записан"
+
+msgid "A PHP extension returned an error while uploading the file '%value%'"
+msgstr "PHP расширение возвратило ошибку во время загрузки файла '%value%'"
+
+msgid "File '%value%' was illegally uploaded. This could be a possible attack"
+msgstr "Файл '%value%' загружен некорректно. Возможна атака."
+
+msgid "File '%value%' was not found"
+msgstr "Файл '%value%' не найден"
+
+msgid "Unknown error while uploading file '%value%'"
+msgstr "Произошла неизвестная ошибка во время загрузки файла '%value%'"
+
+msgid "File '%value%' has a false mimetype of '%type%'"
+msgstr "Файл '%value%' имеет некорректный mimetype '%type%'"
+
+msgid "The mimetype of file '%value%' could not be detected"
+msgstr "Mime-тип файла '%value%' не определён"
+
+msgid "File '%value%' can not be read"
+msgstr "Файл '%value%' не может быть прочитан"
+
+msgid "CreationDateFrom"
+msgstr "Дата ввода с"
+
+msgid "CreationDateTo"
+msgstr "по"
+
+msgid "LastCallingDateFrom"
+msgstr "Дата прозвона с"
+
+msgid "LastCallingDateTo"
+msgstr "по"
+
+msgid "TotalAreaFrom"
+msgstr "Общая площадь с"
+
+msgid "TotalAreaTo"
+msgstr "по"
+
+msgid "ContractDateFrom"
+msgstr "Дата договора с"
+
+msgid "ContractDateTo"
+msgstr "по"
+
+msgid "Storey"
+msgstr "Этаж"
+
+msgid "StoreyCount"
+msgstr "Кол-во этажей"
+
+msgid "LivingAreaFrom"
+msgstr "Жилая площадь с"
+
+msgid "LivingAreaTo"
+msgstr "по"
+
+msgid "KitchenArea"
+msgstr "Площадь кухни"
+
+msgid "KitchenAreaFrom"
+msgstr "Площадь кухни с"
+
+msgid "KitchenAreaTo"
+msgstr "по"
+
+msgid "ExploitYearFrom"
+msgstr "Ввод в эксплуатацию с"
+
+msgid "ExploitYearTo"
+msgstr "не позже"
+
+msgid "OwnerPrice"
+msgstr "Цена владельца"
+
+msgid "Planning"
+msgstr "Планировка"
+
+msgid "Operation"
+msgstr "Операция"
+
+msgid "Object"
+msgstr "Объект"
+
+msgid "ColumnModelSettings"
+msgstr "Настройка колонок сетки"
+
+msgid "Alias"
+msgstr "Псевдоним"
+
+msgid "ColumnAlias"
+msgstr "Псевдоним колонки"
+
+msgid "ColumnWidth"
+msgstr "Ширина колонки"
+
+msgid "ColumnIsVisible"
+msgstr "Отображать на экране"
+
+msgid "ColumnIsPrintable"
+msgstr "Отображать при печати"
+
+msgid "UserColumnsModelSettings"
+msgstr "Настройки колонок для пользователя"
+
+msgid "IsAgency"
+msgstr "Предложение от агентства"
+
+msgid "EditGridColumnModel"
+msgstr "Настроить отображение таблицы"
+
+msgid "AnnoucementFromAgency"
+msgstr "Объявление от агентства"
+
+msgid "AnnoucementPhonesExistInCouplingTable"
+msgstr "Телефоны найдены в стыковочной таблице"
+
+msgid "AnnoucementPhonesExistInMainTable"
+msgstr "Телефоны найдены в основной таблице"
+
+msgid "AnnoucementPhonesNotExistsInDb"
+msgstr "Телефоны из объявления не найдены"
+
+msgid "CouplingDateFrom"
+msgstr "Дата стыковки с"
+
+msgid "CouplingDateTo"
+msgstr "по"
+
+msgid "TruncateCommand"
+msgstr "Очистить таблицу"
+
+msgid "TruncateAction"
+msgstr "Очистка таблицы"
+
+msgid "TruncateCouplingTableConfirm!HTML!"
+msgstr ""
+"<p>Вы действительно очистить стыковочную таблицу?</p><p><strong>ВНИМАНИЕ!</"
+"strong> Результаты выполнения данной операции невозможно будет отменить.</p>"
+
+msgid "Thumbnail"
+msgstr "Миниатюра"
+
+msgid "FileSize"
+msgstr "Размер файла"
+
+msgid "Images"
+msgstr "Изображения"
+
+msgid "HasAttachedImages"
+msgstr "Прикреплены фото"
+
+msgid "MimeType"
+msgstr "Тип MIME"

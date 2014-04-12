@@ -1,0 +1,52 @@
+<script type="text/javascript" language="javascript">
+    page = $.extend(page, {
+        beforePageLayout: function() {
+            var self = this;
+            var grid = $('#list');
+            grid.setGridParam({
+                onSelectRow: function() {
+                    var grid = $('#list');
+                    var selectedRowId = grid.getGridParam('selrow');
+                    if ($('#' + selectedRowId, grid).hasClass('ui-state-highlight')) {
+                        var unSelecting = $('.jqgrow.ui-state-highlight', grid).not('#' + selectedRowId);
+                        for(var i=0; i<unSelecting.length; i++){
+                            grid.setSelection(unSelecting.eq(i).attr('id'), false);
+                        }
+                    }
+                }
+            });
+
+            self.constructor.prototype.beforePageLayout.call(self);
+        },
+        afterPageLayout: function() {
+            var self = this;
+            self.constructor.prototype.afterPageLayout.call(self);
+
+            var popupPhrases = {
+                cancel: <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>,
+                select: <?php echo Zend_Json::encode($this->translate('SelectCommand')); ?>,
+                breakConnection: <?php echo Zend_Json::encode($this->translate('BreakConnectionCommand')); ?>,
+                alert: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                noSelection: <?php echo Zend_Json::encode($this->translate('NoObjectSelectedLinkingConfirm!HTML!')); ?>,
+                ok: <?php echo Zend_Json::encode($this->translate('Ok')); ?>
+            };
+
+            $('#departmentTitleFilter').each(function() { $(this).width($(this).width() - 20); }).linkableField(
+                {
+                    visibleParam: 'title',
+                    basicUrl: '/administration/departments',
+                    idHolder: '#departmentIdFilter',
+                    popupPhrases: popupPhrases
+                }
+            );
+            $('#specializationTitleFilter').each(function() { $(this).width($(this).width() - 20); }).linkableField(
+                {
+                    visibleParam: 'title',
+                    basicUrl: '/administration/specializations',
+                    idHolder: '#specializationIdFilter',
+                    popupPhrases: popupPhrases
+                }
+            );
+        }
+    });
+</script>

@@ -1,0 +1,587 @@
+<link href="/css/blanks/real-estate-proposal.css" media="screen" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/css/lightbox.css" media="screen" type="text/css" />
+<script type="text/javascript" src="/js/jquery.addressdialog.js"></script>
+<script type="text/javascript" src="/js/jquery.errortracker.js"></script>
+<script type="text/javascript" src="/js/jquery.validation.js"></script>
+<script type="text/javascript" src="/js/validation/validation.locale-ru.js"></script>
+<script type="text/javascript" src="/js/jquery.search-contragent.js"></script>
+<script type="text/javascript" src="/js/jquery.lightbox.js"></script>
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildSpecialLayout();
+            self.buildToolbars();
+            self.setValidators();
+            self.decorateElements();
+        },
+        buildSpecialLayout: function() {
+            var self = this;
+            self.buildTabs();
+            <?php if($this->id) { ?>
+            self.buildImageUploader();
+            self.buildGalleryGrid();
+            <?php } ?>
+           // Настройки формы для различных типов недвижимости
+           var BlankDisplayManager = function(blank){
+                if(typeof blank == 'string'){
+                    blank = $(blank);
+                }
+                if(!blank.is('form')){
+                    throw new Error('Invalid program logic. Blank must be html form element');
+                }
+                this.blank = blank;
+                this.blankFieldsMemory = $([]);
+                this.realEstateType = null;
+                this.loader = $('<div />').addClass('ui-dialog-loader');
+            };
+
+            BlankDisplayManager.prototype.setRealEstateType = function(type){
+                if(!type){
+                    throw new Error('Invalid type of real estate objects');
+                } else if(type && (this.realEstateType == type)) {
+                    return;
+                }
+                this.realEstateType = type;
+                this.loadBlankFieldsSettings();
+            };
+
+            BlankDisplayManager.prototype.showLoaderIcon = function(){
+                this.blank.prepend(this.loader);
+            };
+
+            BlankDisplayManager.prototype.hideLoaderIcon = function(){
+                this.loader.remove();
+            };
+
+            BlankDisplayManager.prototype.loadBlankFieldsSettings = function(){
+                var self = this;
+                $.ajax({
+                    url: '/workspace/real-estate-proposals/blank-fields-settings',
+                    type: 'GET',
+                    data: {realEstateType: self.realEstateType},
+                    dataType: 'json',
+                    async: true,
+                    beforeSend: function() {
+                        self.showLoaderIcon.call(self);
+                    },
+                    complete: function() {
+                        self.hideLoaderIcon.call(self);
+                    },
+                    success: function(data)  {
+                        self.onloadSettingsSuccess.apply(self, arguments);
+                    },
+                    error: function(){
+                        alert('error');
+                    }
+                });
+            };
+
+            BlankDisplayManager.prototype.onloadSettingsSuccess = function(data){
+                var controls = $([]),
+                    control;
+                for(var prop in data) {
+                    control = $('#' + data[prop]);
+                    if(control.length > 0) {
+                        controls = controls.add(control);
+                    }
+                }
+                this.removeOldSettings()
+                this.applySettings(controls);
+            };
+
+            BlankDisplayManager.prototype.applySettings = function(controls){
+                 var self = this;
+                 self.blankFieldsMemory = controls;
+                 controls.each(function(){
+                    var control = $(this);
+                    self.hideBlankField.apply(self, [control]);
+                    self.resetBlankField.apply(self, [control]);
+                 });
+            };
+
+            BlankDisplayManager.prototype.resetBlankField = function(control){
+                // do nothing for now (для сохранения введенных данных, которые потом скрывались)
+                // if(control.hasClass('ui-linkedfield')) {
+                //     control.linkableField('breakConnection');
+                // } else {
+                //     control.val('');
+                // }
+            };
+
+            BlankDisplayManager.prototype.hideBlankField = function(control) {
+                var parent = control.parents("div.form-element");
+                parent.length ? parent.hide() : control.hide();
+            };
+
+            BlankDisplayManager.prototype.removeOldSettings = function() {
+                var self = this;
+                self.blankFieldsMemory.each(function() {
+                    var control = $(this),
+                        parent = control.parents("div.form-element");
+                    parent.length ? parent.show() : control.show();
+                });
+                self.blankFieldsMemory = $([]);
+            };
+
+            var blankDisplayManager = new BlankDisplayManager('#blank-real-estate-proposal'),
+                $realEstateTypeId = $('#realEstateTypeId'),
+                realEstateType = $realEstateTypeId.val();
+
+                if(realEstateType != ''){
+                    blankDisplayManager.setRealEstateType(realEstateType);
+                }
+                $realEstateTypeId.change(function(){
+                    var el = $(this),
+                        elVal = el.val();
+                    if(elVal != ''){
+                       blankDisplayManager.setRealEstateType(elVal);
+                    }
+                });
+
+             // Отображение формы в две колонки
+             $('#fieldset-proposal, #fieldset-realestateobject, #fieldset-contract').each(function(){
+                var $fieldset = $(this),
+                    $noteParent = $fieldset.find('#note').parents('div.form-element:eq(0)');
+                    $isForLivingParent = $fieldset.find('input:radio[name=isForLiving]').parents('div.form-element:eq(0)');
+                    $wrapperLeft = $fieldset.find('div.form-elements').addClass('form-elements-left'),
+                    $wrapperRight = $('<div />').addClass('form-elements form-elements-right'),
+                    $columnsWrapper = $('<div />').addClass('columns-wrapper')
+                $columnsWrapper.append($wrapperLeft, $wrapperRight);
+                $fieldset.append($columnsWrapper)
+                         .find('div.form-element:odd').appendTo($wrapperRight);
+                $wrapperLeft.width($columnsWrapper/2);
+                $wrapperRight.width($columnsWrapper/2);
+                if($noteParent.size()){
+                    $columnsWrapper.prepend(
+                       $('<div />').addClass('form-elements').append(
+                           $noteParent.css('margin-bottom', '3px')
+                       ),
+                       $('<div />').css("clear", "both")
+                    );
+                }
+                if($isForLivingParent.size()) {
+                    $wrapperLeft.append($isForLivingParent);
+                }
+            });
+        },
+        buildToolbars: function() {
+            var self = this,
+                buttons = new Object();
+            <?php if ($this->blankEditable) { ?>
+             buttons[<?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>] = {
+                id: 'action-save',
+                icon: '/img/icons/24x24/save.gif',
+                action: function() {
+                    var $contragentTitle = $('#contragentTitle'),
+                        $contragentId = $('#contragentId'),
+                        $contragentPhones = $('#contragentPhones'),
+                        cIdVal = $contragentId.val(),
+                        cTitleVal = $contragentTitle.val(),
+                        cPhonesVal = $contragentPhones.val(),
+                        saveBlank = function() {
+                           $('#blank-real-estate-proposal')
+                                .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                                .submit();
+                        },
+                        validateBlank = function() {
+                            isValid = true;
+                            for(var field in self.validators) {
+                                var elValValid = $(field).jqSimpleValidator('validate');
+                                isValid = isValid && elValValid;
+                            }
+                            return isValid;
+                        }
+                    if(!cIdVal && cTitleVal) {
+                       var validateContragent = function() {
+                            var ts = this,
+                                el = $(this),
+                                elVal = el.val();
+                            if(elVal.length > 2) {
+                                $.ajax({
+                                    url: '/directories/contragents/validate-by-title',
+                                    data: {
+                                        contragentTitle: elVal
+                                    },
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    async: true,
+                                    success: function(data)  {
+                                        var $contragentTitle = $('#contragentTitle'),
+                                            $contragentPhones = $('#contragentPhones');
+                                        if(data.valid) {
+                                            var buttons = new Object(),
+                                                confirmMessage = <?php echo Zend_Json::encode($this->translate('NewContragentSaveСonfirm')); ?>;
+                                            buttons[<?php echo Zend_Json::encode($this->translate('ApplyCommand')); ?>] = function(){
+                                                $(this).dialog('destroy');
+                                                $('#blank-real-estate-proposal')
+                                                    .append('<input type="hidden" name="newcontragent[title]" value="' + $contragentTitle.val() + '"/>')
+                                                    .append('<input type="hidden" name="newcontragent[phone]" value="' + $contragentPhones.val() + '"/>')
+                                                saveBlank();
+                                            };
+                                            buttons[<?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>] = function(){
+                                                $(this).dialog('destroy');
+                                            };
+                                            confirmMessage = confirmMessage.replace("%%title%%", $contragentTitle.val());
+                                            $('<div />').text(confirmMessage).dialog({
+                                                modal: true,
+                                                title: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                                                buttons: buttons
+                                            });
+                                        } else {
+                                            var buttons = new Object(),
+                                                errorMessage = <?php echo Zend_Json::encode($this->translate('NewContragentSaveFail'));?>;
+                                            buttons[<?php echo Zend_Json::encode($this->translate('Close')); ?>] = function(){
+                                                $(this).dialog('destroy');
+                                            };
+                                            errorMessage = errorMessage.replace("%%title%%", $contragentTitle.val())
+                                            $('<div />').text(errorMessage).dialog({
+                                                modal: true,
+                                                title: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                                                buttons: buttons
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        };
+                        validateContragent.call($contragentTitle.get(0));
+
+                    } else {
+                        if(validateBlank()) {
+                            saveBlank();
+                        }
+                    }
+                }
+             };
+             buttons[<?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>] ={
+                id: 'action-reset',
+                icon: '/img/icons/24x24/reset.gif',
+                action: function() {
+                    window.location.reload();
+                }
+             };
+             self.createToolbar(buttons);
+            <?php } else { ?>
+                //no available toolbars
+            <?php } ?>
+        },
+        buildTabs: function() {
+             <?php if($this->id) { ?>
+                var tabHolder = $('div.#tab-holder'),
+                tabTitle = $('<ul/>').attr({'id': 'tab-title'}).append(
+                    $('<li/>').append($('<a />')
+                              .attr('href', '#tab-block-1')
+                              .text(<?php echo Zend_Json::encode($this->translate('Data')); ?>)),
+                    $('<li />').append($('<a />')
+                               .attr('href', '#tab-block-2')
+                               .text(<?php echo Zend_Json::encode($this->translate('Images')) ?>))
+                );
+                tabHolder.prepend(tabTitle)
+                     .tabs({selected: 0, height: 'auto'});
+              <?php } ?>
+        },
+        buildImageUploader: function() {
+            <?php if($this->id) { ?>
+            var dropZone = $('div#dropZone');
+            if (window.FileReader == undefined) {
+                dropZone.text('Не поддерживается браузером!');
+                dropZone.addClass('error');
+            }
+            dropZone[0].ondragover = function() {
+                dropZone.addClass('hover');
+                return false;
+            };
+
+            dropZone[0].ondragleave = function() {
+                dropZone.removeClass('hover');
+                return false;
+            };
+
+            var uploadProgress = function(event) {
+                var percent = parseInt(event.loaded / event.total * 100);
+                dropZone.text('Загрузка: ' + percent + '%');
+            },
+            turnToBeginningState = function(){
+               dropZone.text('Для загрузки перетащите файл сюда.')
+                       .removeClass('drop')
+                       .removeClass('error');
+            },
+            indicateError = function(messageText) {
+                dropZone.removeClass('drop')
+                        .addClass('error')
+                        .text(messageText);
+                setTimeout(turnToBeginningState, 3000);
+            },
+            indicateSuccess = function(messageText){
+                dropZone.removeClass('error')
+                        .addClass('drop')
+                        .text(messageText);
+                setTimeout(turnToBeginningState, 3000);
+            },
+            stateChange = function(event) {
+                var xhr = event.target;
+                if (event.target.readyState == 4) {
+                    if (event.target.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if(response.success == true) {
+                            indicateSuccess('Загрузка успешно завершена!');
+                        } else {
+                            indicateError(response.message);
+                        }
+                        $('#gallery-grid').trigger('reloadGrid');
+                    } else {
+                        indicateError('Произошла ошибка!');
+                    }
+                }
+            };
+            dropZone[0].ondrop = function(event) {
+                event.preventDefault();
+                dropZone.removeClass('hover');
+                dropZone.addClass('drop');
+
+                var xhr = new XMLHttpRequest(),
+                    filesForTransfer = event.dataTransfer.files;
+                if(filesForTransfer.length > 0) {
+                    var formData = new FormData();
+                    formData.append("documentId", <?php echo $this->id; ?>);
+                    formData.append("documentType", '<?php echo $this->documentType; ?>');
+                    for(var i in filesForTransfer) {
+                        var file = filesForTransfer[i];
+                        formData.append(file.name, file);
+                    }
+                    xhr.upload.addEventListener('progress', uploadProgress, false);
+                    xhr.onreadystatechange = stateChange;
+                    xhr.open('POST', '<?php echo $this->url(array('module' => 'workspace',  'controller' => 'file-attachments', 'action' => 'upload-file')); ?>', true);
+                    xhr.send(formData);
+                } else {
+                    indicateError('Произошла ошибка!');
+                }
+            };
+            <?php } ?>
+        },
+        decorateElements: function() {
+            <?php if($this->blankEditable) {?>
+            var popupPhrases = {
+                cancel: <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>,
+                select: <?php echo Zend_Json::encode($this->translate('SelectCommand')); ?>,
+                breakConnection: <?php echo Zend_Json::encode($this->translate('BreakConnectionCommand')); ?>,
+                alert: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                noSelection: <?php echo Zend_Json::encode($this->translate('NoObjectSelectedLinkingConfirm!HTML!')); ?>,
+                ok: <?php echo Zend_Json::encode($this->translate('Ok')); ?>
+            },
+            $realEstateType = $('#realEstateType'),
+            $realEstateTypeId = $('#realEstateTypeId'),
+            $heatingType = $('#heatingType'),
+            $hotWaterSupply = $('#hotWaterSupply'),
+            $contragentTitle = $('#contragentTitle'),
+            $contragentPhones = $('#contragentPhones');
+            $realtorName = $('#realtorName'),
+            $geoDistrictTitle = $('#geoDistrictTitle'),
+            $planningType = $('#planningType'),
+            $realEstatePurpose = $('#realEstatePurpose'),
+            $proposalStatus = $('#proposalStatus'),
+            $bathroomType = $('#bathroomType');
+
+            $contragentTitle.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/contragents/main',
+                   idHolder: '#contragentId',
+                   popupPhrases: popupPhrases
+            });
+            $realEstateType.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/real-estate-types/main',
+                   idHolder: '#realEstateTypeId',
+                   popupPhrases: popupPhrases,
+                   accept: function(data) {
+                      $realEstatePurpose.linkableField('enable');
+                      $realEstatePurpose.linkableField('option', 'getParams', {
+                          forType: data.id
+                       });
+                   },
+                   unlink: function() {
+                       $realEstatePurpose.linkableField('option', 'getParams', {});
+                       $realEstatePurpose.linkableField('breakConnection');
+                       $realEstatePurpose.linkableField('disable');
+                   }
+            });
+            $heatingType.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/heating-types/main',
+                   idHolder: '#heatingTypeId',
+                   popupPhrases: popupPhrases
+            });
+            $hotWaterSupply.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/hot-water-supplies/main',
+                   idHolder: '#hotWaterSupplyId',
+                   popupPhrases: popupPhrases
+            });
+            $realtorName.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['LastName', 'FirstName', 'SecondName'],
+                   basicUrl: '/administration/users',
+                   idHolder: '#realtorId',
+                   popupPhrases: popupPhrases
+            });
+            $geoDistrictTitle.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/geographical-districts/main',
+                   idHolder: '#geoDistrictId',
+                   popupPhrases: popupPhrases
+            });
+            $planningType.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/planning-types/main',
+                   idHolder: '#planningTypeId',
+                   popupPhrases: popupPhrases
+            });
+            $realEstatePurpose.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/real-estate-purposes/main',
+                   idHolder: '#realEstatePurposeId',
+                   popupPhrases: popupPhrases,
+                   enabled: ($realEstateTypeId.val() !== '')
+            });
+            $proposalStatus.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/proposal-statuses/main',
+                   idHolder: '#proposalStatusId',
+                   popupPhrases: popupPhrases
+            });
+            $bathroomType.each(function(){$(this).width($(this).width() - 20)}).linkableField({
+                   visibleParam: ['Title'],
+                   basicUrl: '/directories/bathroom-types/main',
+                   idHolder: '#bathroomTypeId',
+                   popupPhrases: popupPhrases
+            });
+            if($realEstateTypeId.val() != ''){
+                $realEstatePurpose.linkableField('option', 'getParams', {
+                    forType: $realEstateTypeId.val()
+                });
+            }
+            <?php } else { ?>
+            $(':input').datepicker('disable');
+            <?php } ?>
+
+            $('#objectAddress').attachAddressDialog({
+                url: '/directories/addresses-manager',
+                controlFields: {
+                    'settlement' : $('#settlementId'),
+                    'street' : $('#streetId'),
+                    'building' : $('#buildingNumber'),
+                    'flat'     : $('#flatNumber')
+                },
+                TitleText: <?php echo Zend_Json::encode($this->translate('EnteringAddress')); ?>,
+                StreetText     : <?php echo Zend_Json::encode($this->translate('Street')); ?>,
+                SettlementText : <?php echo Zend_Json::encode($this->translate('Settlement')); ?>,
+                BuildingText : <?php echo Zend_Json::encode($this->translate('BuildingNumber')); ?>,
+                FlatText : <?php echo Zend_Json::encode($this->translate('FlatNumber')); ?>,
+                ApplyCommandText : <?php echo Zend_Json::encode($this->translate('ApplyCommand')); ?>,
+                CancelCommandText : <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>
+            });
+
+            $('#searchByPhone').searchContragentField({
+                url: '/directories/contragents/search-by-phone',
+                controlFields: {
+                    id: $('#contragentId'),
+                    title: $contragentTitle,
+                    phones: $('#contragentPhones')
+                }
+            });
+
+        },
+        buildGalleryGrid: function(){
+            var grid = $('#gallery-grid'),
+                  pager = $('#gallery-grid-pager'),
+                  dataUrl = '/workspace/file-attachments/list-attachment',
+                  <?php if($this->id) {?>
+                  dataUrl = dataUrl +  '/id/' + '<?php echo $this->id; ?>';
+                  <?php }?>
+                  <?php if($this->documentType) { ?>
+                   dataUrl = dataUrl + '/type/' + '<?php echo $this->documentType; ?>';
+                  <?php } ?>
+                  gridOptions = {
+                        datatype: "json",
+                        url: dataUrl,
+                        editurl: '/workspace/file-attachments/item',
+                        colNames: [
+                            <?php echo Zend_Json::encode($this->translate('Thumbnail'))?>,
+                            <?php echo Zend_Json::encode($this->translate('Title'))?>,
+                            <?php echo Zend_Json::encode($this->translate('Description'))?>,
+                            <?php echo Zend_Json::encode($this->translate('FileSize'))?>,
+                            <?php echo Zend_Json::encode($this->translate('MimeType'))?>,
+                            <?php echo Zend_Json::encode($this->translate('DownloadCommand'))?>,
+                        ],
+                        colModel:[
+                            {name: 'Thumbnail', index: 'Thumbnail', sortable: false, width: 104, editable: false},
+                            {name: 'Title', index: 'Title', sortable: false, width: 100, editable: true, editoptions : {size: 60}},
+                            {name: 'Description', index: 'Description', sortable: false, width: 350, editable: true,
+                             'edittype':'textarea', editoptions : {rows: 5, cols: 62}},
+                            {name: 'Size', index: 'Size', sortable: false, width: 50, editable: true, editoptions : {readonly: 'readonly', size: 60}},
+                            {name: 'MimeType', index: 'MimeType', sortable: false, width: 80,
+                             editable: true, editoptions : {readonly: 'readonly', size: 60}},
+                            {name: 'DownloadCommand', index: 'DownloadCommand', sortable: false, width: 80, editable: false},
+                        ],
+                        pager: pager,
+                        multiselect: false,
+                        width: 900,
+                        height: 400,
+                        viewrecords: true,
+                        pgbuttons: false,
+                        pginput: false
+                  };
+              grid.jqGrid(gridOptions).navGrid(
+                '#gallery-grid-pager',
+               {add: false, edit: true, del: true, search: false, refresh: true},
+               {closeAfterAdd: true, closeAfterEdit: true, 'width':425}
+              );
+        },
+        validators: {
+            '#roomsArea' : {
+                event: 'change',
+                validatefunc: function() {
+                    return $.appValidation.regExp.call(this, /^(\d+(\.\d)?\/)*\d+(\.\d)?$/i, false);
+                }
+            },
+            '#complexArea' : {
+                event: 'change',
+                validatefunc: function() {
+                    return $.appValidation.regExp.call(this, /^(\d+(\.\d)?\/){2}\d+(\.\d)?$/i, false);
+                }
+            },
+            '#balconiesAndLoggiasCount': {
+                event: 'change',
+                validatefunc: function() {
+                    return $.appValidation.regExp.call(this, /^\d+\/\d+$/i, false);
+                }
+            },
+            '#storeyInfo' : {
+                event: 'change',
+                validatefunc: function() {
+                    return $.appValidation.regExp.call(this, /^\d+\/\d+$/i, false);
+                }
+            },
+            '#ownerPhones': {
+                event: 'change',
+                validatefunc: function() {
+                    return $.appValidation.regExp.call(this, /^(\d+,\s*)*\d+$/i, false);
+                }
+            },
+            '#startExploitYear': {
+                event: 'change',
+                validatefunc: function(){
+                    return $.appValidation.digits.call(this, false);
+                }
+            }
+        },
+        setValidators: function() {
+           var self = this;
+           for(var field in self.validators) {
+               var options = self.validators[field];
+               $(field).jqSimpleValidator(options);
+           }
+        }
+    });
+</script>

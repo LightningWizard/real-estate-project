@@ -1,0 +1,45 @@
+.ui-helper-reset {line-height: 1}
+#blank-real-estate-proposal fieldset {margin:10px auto 0px auto;}
+
+#blank-real-estate-proposal #fieldset-proposal .form-element-item,
+#blank-real-estate-proposal #fieldset-realestateobject .form-element-item {width:200px;}
+
+#blank-real-estate-proposal #fieldset-proposal #objectAddress,
+#blank-real-estate-proposal #fieldset-proposal #ownerPhones,
+#blank-real-estate-proposal #fieldset-proposal #exchangeFor {height: 3.8em}
+
+#blank-real-estate-proposal #fieldset-realestateobject #note {width:700px; height:2.8em;}
+.form-elements-left, .form-elements-right{float: left; margin-right: 20px;}
+.fieldset-visible {padding: 3px 5px; margin: 5px}
+
+#dropZone {    
+    color: #555;
+    font-size: 18px;
+    text-align: center;    
+    
+    width: 400px;
+    padding: 50px 0;
+    margin: 50px auto;
+    
+    background: #eee;
+    border: 1px solid #ccc;
+    
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#dropZone.hover {
+    background: #ddd;
+    border-color: #aaa;
+}
+
+#dropZone.error {
+    background: #faa;
+    border-color: #f00;
+}
+
+#dropZone.drop {
+    background: #afa;
+    border-color: #0f0;
+}

@@ -1,0 +1,146 @@
+<link href="/css/blanks/settlement.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+            self.buildSpecialLayout();
+            self.buildToolbars();
+            self.decorateElements();
+
+        },
+        buildSpecialLayout: function() {
+            var grid, pager;
+            $('<div/>').addClass('fieldset-wrapper').append(
+                $('<fieldset/>').addClass('fieldset-visible').append(
+                     $('<legend />').text(<?php echo Zend_Json::encode($this->translate('ColumnsSettings')) ?>),
+                     $('<div />').attr({'id': 'settings-grid-wrapper'}).append(
+                        (grid = $('<table />')).attr({'id': 'settings-grid'}).addClass('scroll'),
+                        (pager = $('<div />')).attr({'id': 'settings-grid-pager'}).addClass('scroll')
+                     )
+                )
+            ).insertBefore($('#fieldset-notice').parent());
+
+            grid.jqGrid({
+                datatype: 'local',
+                colNames: [
+                    'id',
+                    <?php echo Zend_Json::encode($this->translate('ColumnName')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnAlias')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnWidth')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnIsVisible')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnIsPrintable')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnIsHolded')); ?>,
+                    <?php echo Zend_Json::encode($this->translate('ColumnReflector')); ?>
+                ],
+                colModel: [
+                    {name: 'id', index: 'id', hidden: true, key: true},
+                    {name: 'ColumnName', index: 'ColumnName', sortable: false, width: 150, editable: true, editoptions : {readonly: 'readonly'}},
+                    {name: 'ColumnAlias', index: 'ColumnAlias', sortable: false, width: 150, editable: true, editrules: {required: true}},
+                    {name: 'ColumnWidth', index: 'ColumnWidth', sortable: false, width: 80, editable: true, editrules: {integer: true}},
+                    {name: 'ColumnIsVisible', index: 'ColumnIsVisible', sortable: false, width: 70, formatter: 'checkbox', editable: true,edittype: 'checkbox', editoptions: {value:"1:0"}},
+                    {name: 'ColumnIsPrintable', index: 'ColumnIsPrintable', sortable: false, width: 70, formatter: 'checkbox', editable: true,edittype: 'checkbox', editoptions: {value:"1:0"}},
+                    {name: 'ColumnIsHolded', index: 'ColumnIsHolded', sortable: false, width: 70, formatter: 'checkbox', editable: true,edittype: 'checkbox', editoptions: {value:"1:0"}},
+                    {name: 'ColumnReflector', index: 'ColumnReflector', sortable: false, width: 250, editable: true},
+                ],
+                data: <?php echo Zend_Json::encode($this->columnsSettings); ?>,
+                dataProxy: function (ajaxOptions, oper_grid){
+                    if($.isFunction(ajaxOptions.complete)){
+                        ajaxOptions.complete(ajaxOptions.data, 'success');
+                    }
+                },
+                pager: pager,
+                multiselect: false,
+                rowNum: 1000,
+                height: 400
+            }).navGrid(
+              '#settings-grid-pager',
+              {add: false, edit: true, del: false, search: false, refresh: true},
+              {useDataProxy: true, closeAfterEdit: true, reloadAfterSubmit: false, width: 405, height: 255}
+            );
+            grid.jqGrid('sortableRows', {});
+            $('fieldset').collapsibleFieldset().filter('#fieldset-notice').find('> legend').click();
+        },
+        buildToolbars: function() {
+            var self = this,
+                buttons = new Object();
+            <?php if ($this->blankEditable) { ?>
+             buttons[<?php echo Zend_Json::encode($this->translate('SaveCommand')); ?>] = {
+                id: 'action-save',
+                icon: '/img/icons/24x24/save.gif',
+                action: function() {
+                    var blank = $('#blank-column-model'),
+                        grid = $('#settings-grid'),
+                        gridDataContainer = $('<div />'),
+                        dataIDs = grid.getDataIDs();
+                    for(var i = 0, j = dataIDs.length; i < j; i++) {
+                        var rowData = grid.getRowData(dataIDs[i]);
+                        gridDataContainer.append(
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnAlias]" value="' + rowData.ColumnAlias + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnId]" value="' + dataIDs[i] + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnWidth]" value="' + rowData.ColumnWidth + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnIsVisible]" value="' + rowData.ColumnIsVisible + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnIsPrintable]" value="' + rowData.ColumnIsPrintable + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnIsHolded]" value="' + rowData.ColumnIsHolded + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnReflector]" value="' + rowData.ColumnReflector + '"/>',
+                            '<input type="hidden" name="columnsSettings[' + rowData.ColumnName + '][columnOrder]" value="' + i+ '"/>'
+                        );
+                    }
+                    $('#blank-column-model').append(gridDataContainer)
+                        .append('<input type="hidden" name="__command__" value="<?php echo md5('save' . Zend_Session::getId()); ?>" />')
+                        .submit();
+                }
+             };
+             buttons[<?php echo Zend_Json::encode($this->translate('ResetCommand')); ?>] ={
+                id: 'action-reset',
+                icon: '/img/icons/24x24/reset.gif',
+                action: function() {
+                    window.location.reload();
+                }
+             };
+             buttons[<?php echo Zend_Json::encode($this->translate('EditCommand')); ?>] = {
+                 id: 'action-edit',
+                 icon: '/img/icons/24x24/edit.gif',
+                 action: function() {
+                     $('#edit_settings-grid').trigger('click');
+                 }
+             };
+             buttons[<?php echo Zend_Json::encode($this->translate('GetColumns')); ?>] ={
+                id: 'action-get-columns',
+                icon: '/img/icons/24x24/refresh.gif',
+                action: function() {
+                    var blank = $('#blank-column-model'),
+                        queryString = blank.formSerialize();
+
+                    $.ajax({
+                        url: '/administration/column-models/columns-settings',
+                        dataType: 'html',
+                        data: queryString,
+                        beforeSend: function() {
+                           $('<div />')
+                               .addClass('ui-dialog-loader')
+                               .prependTo($('body'));
+                        },
+                        complete: function() {
+                            $('.ui-dialog-loader').remove();
+                        },
+                        success: function(setings){
+                           var columnsList = $('table#columns-settings-list');
+                           columnsList.append(setings);
+                           columnsList.sortable({revert: true});
+                        }
+                    });
+                }
+             };
+             self.createToolbar(buttons);
+            <?php } else { ?>
+                //no available toolbars
+            <?php } ?>
+        },
+        decorateElements: function() {
+            <?php if(!$this->blankEditable) {?>
+                  $(':input').datepicker('disable');
+            <?php } ?>
+        }
+    });
+</script>

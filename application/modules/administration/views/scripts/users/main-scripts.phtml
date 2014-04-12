@@ -1,0 +1,191 @@
+<script type="text/javascript" language="javascript">
+    page = $.extend(page, {
+        init: function() {
+            var self = this;
+            self.constructor.prototype.init.call(self);
+
+            <?php if ($this->acl->assert('user', 'edit')) { ?>
+            self.createToolbar({
+               <?php echo Zend_Json::encode($this->translate('CreateCommand')); ?>: {
+                    id: 'action-create',
+                    icon: '/img/icons/24x24/add.gif',
+                    action: function() {
+                        $('<div />').iwindow({
+                            title: <?php echo Zend_Json::encode($this->translate('CreateAccountAction')); ?>,
+                            url: '/administration/users/item',
+                            maximized: true,
+                            bubble: true
+                        })
+                    }
+                },
+                <?php echo Zend_Json::encode($this->translate('EditCommand')); ?>: {
+                    id: 'action-edit',
+                    icon: '/img/icons/24x24/edit.gif',
+                    action: function() {
+                        $('<div />').iwindow({
+                            title: <?php echo Zend_Json::encode($this->translate('EditAccountAction')); ?>,
+                            url: '/administration/users/item/id/' + $('#list').getGridParam('selrow'),
+                            maximized: true,
+                            bubble: true
+                        })
+                    }
+                }
+            });
+            self.createToolbar({
+                <?php echo Zend_Json::encode($this->translate('LockCommand')); ?>: {
+                    id: 'action-lock',
+                    icon: '/img/icons/24x24/lock.gif',
+                    action: function() {
+                        self.toggleAccountLock(
+                            <?php echo Zend_Json::encode($this->translate('LockUsersAction')); ?>,
+                            <?php echo Zend_Json::encode($this->translate('LockUserConfirm!HTML!')); ?>,
+                            <?php echo Zend_Json::encode(md5('lockaccount' . Zend_Session::getId())) ?>
+                        )
+                    }
+                },
+                <?php echo Zend_Json::encode($this->translate('UnlockCommand')); ?>: {
+                    id: 'action-unlock',
+                    icon: '/img/icons/24x24/unlock.gif',
+                    action: function() {
+                        self.toggleAccountLock(
+                            <?php echo Zend_Json::encode($this->translate('UnlockUsersAction')); ?>,
+                            <?php echo Zend_Json::encode($this->translate('UnlockUserConfirm!HTML!')); ?>,
+                            <?php echo Zend_Json::encode(md5('unlockaccount' . Zend_Session::getId())) ?>
+                        )
+                    }
+                }
+            });
+            <?php } ?>
+            self.createGridToolbar(
+                <?php echo Zend_Json::encode($this->translate('RefreshCommand')); ?>,
+                <?php echo Zend_Json::encode($this->translate('SelectAllCommand')); ?>,
+                <?php echo Zend_Json::encode($this->translate('DeselectAllCommand')); ?>,
+                <?php echo Zend_Json::encode($this->translate('ToggleSelectionCommand')); ?>
+            );
+            $('#page-toolbar .ui-button').button('disable');
+        },
+        beforePageLayout: function() {
+            var self = this;
+
+            var grid = $('#list');
+            grid.setGridParam({
+                loadBeforeSend: function() {
+                    $('#page-toolbar .ui-button').button('disable');
+                },
+                gridComplete: function() {
+                    self.setActionsToolbarButtonsState();
+                    self.setGridToolbarButtonsState();
+                },
+                onSelectRow: function() {
+                    self.setActionsToolbarButtonsState();
+                    self.setGridToolbarButtonsState();
+                }
+            });
+
+            self.constructor.prototype.beforePageLayout.call(self);
+        },
+        setActionsToolbarButtonsState: function() {
+            var self = this;
+            
+            self.constructor.prototype.setActionsToolbarButtonsState.call(self);
+            $('#action-create').button('enable');
+            
+            if ($('#list .jqgrow.ui-state-highlight').size() == 1) {
+                $('#action-edit').button('enable');
+            } else {
+                $('#action-edit').button('disable');
+            }
+            if ($('#list .jqgrow.ui-state-highlight img.bool-true').size()) {
+                $('#action-lock').button('enable');
+            } else {
+                $('#action-lock').button('disable');
+            }
+            if ($('#list .jqgrow.ui-state-highlight img.bool-false').size()) {
+                $('#action-unlock').button('enable');
+            } else {
+                $('#action-unlock').button('disable');
+            }
+        },
+        toggleAccountLock: function(dialogTitle, confirmText, command) {
+            var list = $('<ul />');
+            $('#list tr.jqgrow.ui-state-highlight').each(function() {
+                $('<li />')
+                    .text($.trim(
+                        $(this).find('td:nth-child(2)').text() + ', ' +
+                        $(this).find('td:nth-child(3)').text() + ' ' +
+                        $(this).find('td:nth-child(4)').text() + ' ' +
+                        $(this).find('td:nth-child(5)').text()
+                    ))
+                    .appendTo(list);
+            });
+            $('<div />')
+                .html(confirmText)
+                .append(list)
+                .dialog({
+                    title: dialogTitle,
+                    modal: true,
+                    resizable: false,
+                    draggable: true,
+                    width: 500,
+                    beforeclose: function() {
+                        $(this).dialog('destroy').unbind().remove();
+                    },
+                    buttons: {
+                        <?php echo Zend_Json::encode($this->translate('No'))?>: function () {
+                            $(this).dialog('close');
+                        },
+                        <?php echo Zend_Json::encode($this->translate('Yes'))?>: function () {
+                            var dialog = $(this);
+                            $.ajax({
+                                url: '/administration/users/edit',
+                                type: 'POST',
+                                data: {
+                                    'items[]': $('#list').getGridParam("selarrrow"),
+                                    '__command__': command
+                                },
+                                beforeSend: function() {
+                                    $('<div />')
+                                        .addClass('ui-dialog-loader')
+                                        .prependTo(dialog.children().animate({opacity: 0.0}, 1000).end());
+                                },
+                                complete: function() {
+                                    dialog.dialog('close');
+                                    $('#list').trigger('reloadGrid');
+                                }
+                            });
+                        }
+                    }
+                });
+        },
+        afterPageLayout: function() {
+            var self = this;
+            self.constructor.prototype.afterPageLayout.call(self);
+
+            var popupPhrases = {
+                cancel: <?php echo Zend_Json::encode($this->translate('CancelCommand')); ?>,
+                select: <?php echo Zend_Json::encode($this->translate('SelectCommand')); ?>,
+                breakConnection: <?php echo Zend_Json::encode($this->translate('BreakConnectionCommand')); ?>,
+                alert: <?php echo Zend_Json::encode($this->translate('Alert')); ?>,
+                noSelection: <?php echo Zend_Json::encode($this->translate('NoObjectSelectedLinkingConfirm!HTML!')); ?>,
+                ok: <?php echo Zend_Json::encode($this->translate('Ok')); ?>
+            };
+
+            $('#departmentTitleFilter').each(function() { $(this).width($(this).width() - 20); }).linkableField(
+                {
+                    visibleParam: 'title',
+                    basicUrl: '/administration/departments',
+                    idHolder: '#departmentIdFilter',
+                    popupPhrases: popupPhrases
+                }
+            );
+            $('#specializationTitleFilter').each(function() { $(this).width($(this).width() - 20); }).linkableField(
+                {
+                    visibleParam: 'title',
+                    basicUrl: '/administration/specializations',
+                    idHolder: '#specializationIdFilter',
+                    popupPhrases: popupPhrases
+                }
+            );
+        }
+    });
+</script>
