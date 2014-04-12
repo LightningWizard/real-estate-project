@@ -256,7 +256,7 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
             $heatingTypeId, $heatingType, $isPrivatization, $hotWaterSupplyId,$hotWaterSupply,
             $startExploitYear, $isPrivatization,$bathroomTypeId,
             $bathroomTypeTitle, $isElectricity,$isGas , $isWater,
-            $viewOfTheSea, $isSewerage, $isForLiving
+            $isSewerage, $isForLiving
         );
         $elementNames = array();
         foreach($realEstateObjectElements as $element) {
@@ -327,7 +327,6 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
             array('connect' => array($isWater->getName(), array('RealEstateProposal', 'IS_WATER')),),
             array('connect' => array($isGas->getName(), array('RealEstateProposal', 'IS_GAS')),),
             array('connect' => array($isPrivatization->getName(), array('RealEstateProposal', 'IS_PRIVATISATION')),),
-            array('connect' => array($viewOfTheSea->getName(), array('RealEstateProposal', 'VIEW_OF_SEA')),),
             array('connect' => array($balconiesAndLoggiasCount->getName(), array('RealEstateProposal', 'BALCONIES_AND_LOGGIAS_COUNT')),),
             array('connect' => array($storeyInfo->getName(), array('RealEstateProposal', 'STOREY_INFO')),),
             array('connect' => array($heatingTypeId->getName(), array('RealEstateProposal', 'HEATINGTYPE_ID')),'reflector'=>'Lis_Blank_Reflector_ZeroInBlankIsNullInDb'),
