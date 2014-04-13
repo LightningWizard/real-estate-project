@@ -1300,3 +1300,18 @@ msgstr "Бойлер"
 
 msgid "CentralHeating"
 msgstr "Центральное отопление"
+
+msgid "RoomsTypeNotDefined"
+msgstr "Не определен"
+
+msgid "RoomsTypeIsolated"
+msgstr "Изолированные"
+
+msgid "RoomsTypeNeighborIsolated"
+msgstr "Смежно-изолированные"
+
+msgid "RoomsTypeNeighbor"
+msgstr "Смежные"
+
+msgid "RoomsType"
+msgstr "Тип комнат"

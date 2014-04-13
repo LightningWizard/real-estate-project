@@ -199,14 +199,16 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
                         array('CompositeElement', array('HtmlTag', array('tag' => 'div', 'id'=> 'gwha-wrapper', 'class' => 'inline-form-element'))
                     ));
 
-        // Тип оптопления
-        $heatingTypeId = new Zend_Form_Element_Hidden('heatingTypeId');
-        $heatingTypeId->setDecorators(array('ViewHelper'));
 
-        $heatingType = new Zend_Form_Element_Text('heatingType');
-        $heatingType->setLabel('HeatingType')
-                    ->setAttrib('readonly', 'readonly')
-                    ->setDecorators(array('CompositeElement'));
+        $roomsType = new Zend_Form_Element_Select('roomsType');
+        $roomsType->addMultiOption(0, 'RoomsTypeNotDefined')
+                  ->addMultioption(1, 'RoomsTypeIsolated')
+                  ->addMultioption(2, 'RoomsTypeNeighborIsolated')
+                  ->addMultioption(3, 'RoomsTypeNeighbor')
+                  ->setValue(0)
+                  ->setLabel('RoomsType')
+                  ->setDecorators(array('CompositeElement'));
+
         // Вода
         $isWater = new Zend_Form_Element_Checkbox('isWater');
         $isWater->setLabel('Water')
@@ -258,7 +260,7 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
              ->setDecorators(array('CompositeElement'));
 
         $realEstateObjectElements = array($note, $balconiesAndLoggiasCount, $landlotArea,
-            $heatingTypeId, $heatingType, $isPrivatization, $hotWaterSupplyId,$hotWaterSupply,
+            $roomsType, $isPrivatization, $hotWaterSupplyId,$hotWaterSupply,
             $startExploitYear, $isPrivatization,$bathroomTypeId,
             $bathroomTypeTitle, $hasGasWaterHeatingApparatus, $isGas, $isWater,
             $hasBoiler, $isForLiving, $hasCentralHeating
@@ -335,7 +337,7 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
             array('connect' => array($isPrivatization->getName(), array('RealEstateProposal', 'IS_PRIVATISATION')),),
             array('connect' => array($balconiesAndLoggiasCount->getName(), array('RealEstateProposal', 'BALCONIES_AND_LOGGIAS_COUNT')),),
             array('connect' => array($storeyInfo->getName(), array('RealEstateProposal', 'STOREY_INFO')),),
-            array('connect' => array($heatingTypeId->getName(), array('RealEstateProposal', 'HEATINGTYPE_ID')),'reflector'=>'Lis_Blank_Reflector_ZeroInBlankIsNullInDb'),
+            array('connect' => array($roomsType->getName(), array('RealEstateProposal', 'ROOMS_TYPE')),),
             array('connect' => array($hotWaterSupplyId->getName(), array('RealEstateProposal', 'HOTWATERSUPPLY_ID')),'reflector'=>'Lis_Blank_Reflector_ZeroInBlankIsNullInDb'),
             array('connect' => array($realEstatePurposeId->getName(), array('RealEstateProposal', 'PURPOSE_ID')),'reflector'=>'Lis_Blank_Reflector_ZeroInBlankIsNullInDb'),
             array('connect' => array($bathroomTypeId->getName(), array('RealEstateProposal', 'BATHROOMTYPE_ID')),'reflector'=>'Lis_Blank_Reflector_ZeroInBlankIsNullInDb'),
