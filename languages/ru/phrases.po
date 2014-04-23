@@ -1315,3 +1315,6 @@ msgstr "Смежные"
 
 msgid "RoomsType"
 msgstr "Тип комнат"
+
+msgid "WaterColumn"
+msgstr "Колонка"

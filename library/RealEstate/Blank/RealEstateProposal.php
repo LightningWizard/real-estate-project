@@ -209,10 +209,9 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
                   ->setLabel('RoomsType')
                   ->setDecorators(array('CompositeElement'));
 
-        // Вода
-        $isWater = new Zend_Form_Element_Checkbox('isWater');
-        $isWater->setLabel('Water')
-                ->setDecorators(array('CompositeElement'));
+        $hasWaterColumn = new Zend_Form_Element_Checkbox('isWater');
+        $hasWaterColumn->setLabel('WaterColumn')
+                       ->setDecorators(array('CompositeElement'));
 
         // Тип горячего водоснабжения
         $hotWaterSupplyId = new Zend_Form_Element_Hidden('hotWaterSupplyId');
@@ -229,11 +228,6 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
                    ->setDecorators(
                       array('CompositeElement', array('HtmlTag', array('tag' => 'div',  'id'=> 'gas-wrapper', 'class' => 'inline-form-element'))
                    ));
-
-        // Вид на море
-        $viewOfTheSea = new Zend_Form_Element_Checkbox('viewOfTheSea');
-        $viewOfTheSea->setLabel('ViewOfTheSea')
-                     ->setDecorators(array('CompositeElement'));
 
         // Бойлер
         $hasBoiler = new Zend_Form_Element_Checkbox('hasBoiler');
@@ -262,7 +256,7 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
         $realEstateObjectElements = array($note, $balconiesAndLoggiasCount, $landlotArea,
             $roomsType, $isPrivatization, $hotWaterSupplyId,$hotWaterSupply,
             $startExploitYear, $isPrivatization,$bathroomTypeId,
-            $bathroomTypeTitle, $hasGasWaterHeatingApparatus, $isGas, $isWater,
+            $bathroomTypeTitle, $hasGasWaterHeatingApparatus, $isGas, $hasWaterColumn,
             $hasBoiler, $isForLiving, $hasCentralHeating
         );
         $elementNames = array();
@@ -332,7 +326,7 @@ class RealEstate_Blank_RealEstateProposal extends Lis_Blank_Abstract {
             array('connect' => array($hasGasWaterHeatingApparatus->getName(), array('RealEstateProposal', 'HAS_GWHA')),),
             array('connect' => array($hasBoiler->getName(), array('RealEstateProposal', 'HAS_BOILER')),),
             array('connect' => array($hasCentralHeating->getName(), array('RealEstateProposal', 'HAS_CENTRAL_HEATING')),),
-            array('connect' => array($isWater->getName(), array('RealEstateProposal', 'IS_WATER')),),
+            array('connect' => array($hasWaterColumn->getName(), array('RealEstateProposal', 'HAS_WATER_COLUMN')),),
             array('connect' => array($isGas->getName(), array('RealEstateProposal', 'IS_GAS')),),
             array('connect' => array($isPrivatization->getName(), array('RealEstateProposal', 'IS_PRIVATISATION')),),
             array('connect' => array($balconiesAndLoggiasCount->getName(), array('RealEstateProposal', 'BALCONIES_AND_LOGGIAS_COUNT')),),
